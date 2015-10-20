@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
+  <class name ="FinancialThing.Models.Data, FinancialThing.Models" table="data">
+    <id name="Id" type="guid">
+      <generator class="guid" />
+    </id>
+    <set name="Values" cascade="all-delete-orphan">
+      <key column="DataId"/>
+      <one-to-many class="FinancialThing.Models.Value"/>
+    </set>
+    <many-to-one name="Dictionary" class="FinancialThing.Models.Dictionary, FinancialThing.Models" cascade="none">
+      <column name="DictionaryId" sql-type="varchar" not-null="true"/>
+    </many-to-one>
+    <many-to-one name="StatementClass" class="FinancialThing.Models.StatementClass, FinancialThing.Models">
+      <column name="StatementClassId" sql-type="varchar"/>
+    </many-to-one>
+  </class>
+</hibernate-mapping>
