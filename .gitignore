@@ -10,6 +10,7 @@
 *.user
 *.suo
 *.exe
+*.dll
 *.pdb
 *.aps
 *_i.c
