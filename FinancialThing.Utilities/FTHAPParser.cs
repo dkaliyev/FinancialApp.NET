@@ -35,6 +35,8 @@ namespace FinancialThing.Utilities
 
             Financials financials = new Financials();
 
+            financials.Pages = new HashSet<Page>();
+
             var companyNameHtml = _grabber.Grab(string.Format(CompanyName, name, exchange));
             var nameHtmlDoc = new HtmlDocument();
             nameHtmlDoc.LoadHtml(companyNameHtml);
@@ -51,13 +53,17 @@ namespace FinancialThing.Utilities
                 var bsHtml = _grabber.Grab(string.Format(Url, name, exchange, page.Name));
                 var bsHtmlDoc = new HtmlDocument();
                 bsHtmlDoc.LoadHtml(bsHtml);
-                var bodies = GetBodies(bsHtmlDoc);
+                var mainBody = bsHtmlDoc.DocumentNode.Descendants("body").FirstOrDefault();
+                var bodies = GetBodies(mainBody);
 
                 var years = GetYears(bsHtmlDoc);
                 pageObj.Statements = new HashSet<StatementClass>();
                 foreach (var statementClass in page.Sections)
                 {
                     var stClass = new StatementClass();
+                    stClass.Data = new HashSet<Data>();
+
+                    stClass.Dictionary = _dictionary.FirstOrDefault(d => d.Code == statementClass.Code);
                     var assetBody = GetSection(bodies, statementClass.DisplayName);
 
                     var rows = GetRows(assetBody, statementClass.DisplayName);
@@ -65,14 +71,24 @@ namespace FinancialThing.Utilities
                     foreach (var row in rows)
                     {
                         int yearCount = years.Count;
+                        var dataName = GetDataName(row);
                         var values = GetAssets(row, yearCount);
-
+                        var data = new Data();
+                        data.Dictionary =
+                            _dictionary.FirstOrDefault(d => d.DisplayName.ToLower().Equals(dataName.ToLower()));
+                        data.Values = new HashSet<Value>();
                         for (int i = 0; i < yearCount; i++)
                         {
-                            
+                            var value = new Value();
+                            value.Year = years[i].ToString();
+                            value.DataValue = values[i];
+                            data.Values.Add(value);
                         }
+                        stClass.Data.Add(data);
                     }
+                    pageObj.Statements.Add(stClass);
                 }
+                financials.Pages.Add(pageObj);
             }
 
 
@@ -104,7 +120,7 @@ namespace FinancialThing.Utilities
             var yearNodes =
                doc.DocumentNode;
             var head = yearNodes.SelectSingleNode("//thead");
-            var tr = head.SelectSingleNode("//tr");
+            var tr = head.ChildNodes.FirstOrDefault(c => c.Name == "tr");
             var tds = tr.ChildNodes
                    .Where(d => !d.Attributes.Contains("class"));
             List<int> years = new List<int>();
@@ -115,21 +131,23 @@ namespace FinancialThing.Utilities
             return years;
         }
 
-        private IEnumerable<HtmlNode> GetBodies(HtmlDocument doc)
+        private IEnumerable<HtmlNode> GetBodies(HtmlNode doc)
         {
-            var bodies = doc.DocumentNode.SelectSingleNode("//table").ChildNodes.Where(n => n.Name == "tbody");
+            //var childNodes = doc.Descendants().FirstOrDefault(c => c.Name.ToLower() == "table".ToLower());
+            var childNodes = doc.Descendants("table").FirstOrDefault();
+            var bodies = childNodes.ChildNodes.Where(n => n.Name == "tbody");
             return bodies;
         }
 
         private HtmlNode GetSection(IEnumerable<HtmlNode> bodies, string name)
         {
-            var section = bodies.First(b => b.ChildNodes.Any(n => n.InnerText.ToLower() == name.ToLower()));
+            var section = bodies.First(b => b.ChildNodes.Any(n => n.InnerText.ToLower().Contains(name.ToLower())));
             return section;
         }
 
         private IEnumerable<HtmlNode> GetRows(HtmlNode node, string name)
         {
-            var assets = node.ChildNodes.Where(n => n.Name == "tr" && n.InnerText.ToLower() != name.ToLower());
+            var assets = node.ChildNodes.Where(n => n.Name == "tr" && !n.InnerText.ToLower().Contains(name.ToLower()));
             return assets;
         }
 
@@ -147,6 +165,14 @@ namespace FinancialThing.Utilities
                 throw new Exception("Number of values is not equal to number of years");
             }
             return values;
+        }
+
+        private string GetDataName(HtmlNode row)
+        {
+            var td = row.ChildNodes.FirstOrDefault(n => n.Attributes["class"].Value == "label");
+            if (td != null)
+                return td.InnerText;
+            return "";
         }
 
         private Data GetData(HtmlNode row, string name, int ind)

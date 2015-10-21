@@ -55,11 +55,19 @@ namespace FinancialThing.Utilities.Test
         }
 
         [TestMethod]
-        public void TestParseBS()
+        public void TestParseMock()
         {
             var parser = new FTHAPParser(mockGrabber.Object, dictionaries);
             var company = parser.Parse("IMT", "LSE");
             Assert.AreEqual("Imperial Tobacco Group PLC".ToLower(), company.FullName.ToLower());
+        }
+
+        [TestMethod]
+        public void TestParseWeb()
+        {
+            var parser = new FTHAPParser(new FTDataGrabber(), dictionaries);
+            var company = parser.Parse("IMT", "LSE");
+
         }
     }
 }
