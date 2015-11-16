@@ -16,5 +16,6 @@ namespace FinancialThing.DataAccess
         K Add(T entity);
         void Update(T entity);
         void Delete(T entity);
+        void SaveOrUpdate(T entity);
     }
 }

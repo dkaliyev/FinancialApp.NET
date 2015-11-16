@@ -9,7 +9,7 @@
       <one-to-many class="FinancialThing.Models.Value"/>
     </set>
     <many-to-one name="Dictionary" class="FinancialThing.Models.Dictionary, FinancialThing.Models" cascade="none">
-      <column name="DictionaryId" sql-type="varchar" not-null="true"/>
+      <column name="DictionaryId" sql-type="varchar"/>
     </many-to-one>
     <many-to-one name="StatementClass" class="FinancialThing.Models.StatementClass, FinancialThing.Models">
       <column name="StatementClassId" sql-type="varchar"/>

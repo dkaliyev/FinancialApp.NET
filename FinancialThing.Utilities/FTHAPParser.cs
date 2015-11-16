@@ -1,110 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using FinancialThing.DataAccess.nHibernate;
+using FinancialThing.Configuration;
+using FinancialThing.DataAccess;
 using FinancialThing.Models;
-using FinancialThing.Services.Utilities;
 using HtmlAgilityPack;
 
 namespace FinancialThing.Utilities
 {
-    public class FTHAPParser: IParser<Company>
+    public class FTHAPParser: IParser<Company, StockExchange>
     {
         private IDataGrabber _grabber;
-        private IEnumerable<Dictionary> _dictionary;
+
+        private IEnumerable<Dictionary> _dictionaries; 
 
         //TODO Move urls to config
         private string Url { get; set; }
         private string CompanyName { get; set; }
 
 
-        public FTHAPParser(IDataGrabber grabber, IEnumerable<Dictionary> dictionary)
+        public FTHAPParser(IDataGrabber grabber, IRepository<Dictionary, Guid> dicRepository)
         {
-            _dictionary = dictionary;
             _grabber = grabber;
+            _dictionaries = dicRepository.GetQuery();
+            
             Url = "http://markets.ft.com/research/Markets/Tearsheets/Financials?s={0}:{1}&subview={2}";
             CompanyName = "http://markets.ft.com/research/Markets/Tearsheets/Financials?s={0}:{1}";
-        }
-
-        public Company Parse(string name, string exchange)
-        {
-            var pages = DataMappingConfiguration.Instance.Pages;
-
-            Company company = new Company();
-
-            Financials financials = new Financials();
-
-            financials.Pages = new HashSet<Page>();
-
-            var companyNameHtml = _grabber.Grab(string.Format(CompanyName, name, exchange));
-            var nameHtmlDoc = new HtmlDocument();
-            nameHtmlDoc.LoadHtml(companyNameHtml);
-            var compName = GetCompanyName(nameHtmlDoc);
-            company.FullName = compName;
-            company.Financials = financials;
-            company.DateAdded = DateTime.Now;
-            company.StockName = exchange;
-
-            foreach (var page in pages)
-            {
-                var pageObj = new Page();
-                pageObj.Dictionary = _dictionary.FirstOrDefault(d => d.Code == page.Code);
-                var bsHtml = _grabber.Grab(string.Format(Url, name, exchange, page.Name));
-                var bsHtmlDoc = new HtmlDocument();
-                bsHtmlDoc.LoadHtml(bsHtml);
-                var mainBody = bsHtmlDoc.DocumentNode.Descendants("body").FirstOrDefault();
-                var bodies = GetBodies(mainBody);
-
-                var years = GetYears(bsHtmlDoc);
-                pageObj.Statements = new HashSet<StatementClass>();
-                foreach (var statementClass in page.Sections)
-                {
-                    var stClass = new StatementClass();
-                    stClass.Data = new HashSet<Data>();
-
-                    stClass.Dictionary = _dictionary.FirstOrDefault(d => d.Code == statementClass.Code);
-                    var assetBody = GetSection(bodies, statementClass.DisplayName);
-
-                    var rows = GetRows(assetBody, statementClass.DisplayName);
-
-                    foreach (var row in rows)
-                    {
-                        int yearCount = years.Count;
-                        var dataName = GetDataName(row);
-                        var values = GetAssets(row, yearCount);
-                        var data = new Data();
-                        data.Dictionary =
-                            _dictionary.FirstOrDefault(d => d.DisplayName.ToLower().Equals(dataName.ToLower()));
-                        data.Values = new HashSet<Value>();
-                        for (int i = 0; i < yearCount; i++)
-                        {
-                            var value = new Value();
-                            value.Year = years[i].ToString();
-                            value.DataValue = values[i];
-                            data.Values.Add(value);
-                        }
-                        stClass.Data.Add(data);
-                    }
-                    pageObj.Statements.Add(stClass);
-                }
-                financials.Pages.Add(pageObj);
-            }
-
-
-            
-
-            
-
-            
-
-            
-
-            
-            
-
-            //var assets = 
-            return company;
         }
 
         private string GetCompanyName(HtmlDocument doc)
@@ -134,7 +55,7 @@ namespace FinancialThing.Utilities
         private IEnumerable<HtmlNode> GetBodies(HtmlNode doc)
         {
             //var childNodes = doc.Descendants().FirstOrDefault(c => c.Name.ToLower() == "table".ToLower());
-            var childNodes = doc.Descendants("table").FirstOrDefault();
+            var childNodes = doc.Descendants("table").FirstOrDefault(t => t.Attributes["data-ajax-content"] != null);
             var bodies = childNodes.ChildNodes.Where(n => n.Name == "tbody");
             return bodies;
         }
@@ -147,7 +68,7 @@ namespace FinancialThing.Utilities
 
         private IEnumerable<HtmlNode> GetRows(HtmlNode node, string name)
         {
-            var assets = node.ChildNodes.Where(n => n.Name == "tr" && !n.InnerText.ToLower().Contains(name.ToLower()));
+            var assets = node.ChildNodes.Where(n => n.Name == "tr" && !n.Attributes["class"].Value.Contains("section"));
             return assets;
         }
 
@@ -178,6 +99,96 @@ namespace FinancialThing.Utilities
         private Data GetData(HtmlNode row, string name, int ind)
         {
             return null;
+        }
+
+        public string GetCompanyName(string name, StockExchange exch)
+        {
+            var companyNameHtml = _grabber.Grab(string.Format(CompanyName, name, exch.Marker));
+            var nameHtmlDoc = new HtmlDocument();
+            nameHtmlDoc.LoadHtml(companyNameHtml);
+            var compName = GetCompanyName(nameHtmlDoc);
+            return compName;
+        }
+
+        public Company Parse(string name, StockExchange exchange)
+        {
+            var pages = DataMappingConfiguration.Instance.Pages;
+
+            Company company = new Company();
+
+            Financials financials = new Financials();
+
+            financials.Pages = new HashSet<Page>();
+
+            financials.Company = company;
+
+            var companyNameHtml = _grabber.Grab(string.Format(CompanyName, name, exchange.Marker));
+            var nameHtmlDoc = new HtmlDocument();
+            nameHtmlDoc.LoadHtml(companyNameHtml);
+            var compName = GetCompanyName(nameHtmlDoc);
+            company.FullName = compName;
+            company.Financials = financials;
+            company.DateAdded = DateTime.Now;
+            company.StockName = name;
+            company.StockExchange = exchange;
+
+            foreach (var page in pages)
+            {
+                var pageObj = new Page();
+                pageObj.Financials = financials;
+                pageObj.Dictionary = _dictionaries.FirstOrDefault(d => d.Code == page.Code);
+                var bsHtml = _grabber.Grab(string.Format(Url, name, exchange.Marker, page.Name));
+                var bsHtmlDoc = new HtmlDocument();
+                bsHtmlDoc.LoadHtml(bsHtml);
+                var mainBody = bsHtmlDoc.DocumentNode.Descendants("body").FirstOrDefault();
+                var bodies = GetBodies(mainBody);
+
+                var years = GetYears(bsHtmlDoc);
+                company.Financials.MinYear = years.Min();
+                company.Financials.MaxYear = years.Max();
+                pageObj.Statements = new HashSet<StatementClass>();
+                foreach (var statementClass in page.Sections)
+                {
+                    var stClass = new StatementClass();
+                    stClass.Data = new HashSet<Data>();
+
+                    stClass.Page = pageObj;
+
+                    stClass.Dictionary = _dictionaries.FirstOrDefault(d => d.Code == statementClass.Code);
+                    var assetBody = GetSection(bodies, statementClass.DisplayName);
+
+                    var rows = GetRows(assetBody, statementClass.DisplayName);
+
+                    foreach (var row in rows)
+                    {
+                        int yearCount = years.Count;
+                        var dataName = GetDataName(row).Replace("&amp;", "&");
+                        var values = GetAssets(row, yearCount);
+                        var data = new Data();
+
+                        data.StatementClass = stClass;
+                        data.Dictionary =
+                            _dictionaries.FirstOrDefault(d => d.DisplayName.ToLower().Contains(dataName.ToLower().Split('&')[0]));
+                        if (data.Dictionary == null)
+                        {
+                            
+                        }
+                        data.Values = new HashSet<Value>();
+                        for (int i = 0; i < yearCount; i++)
+                        {
+                            var value = new Value();
+                            value.Data = data;
+                            value.Year = years[i].ToString();
+                            value.DataValue = values[i];
+                            data.Values.Add(value);
+                        }
+                        stClass.Data.Add(data);
+                    }
+                    pageObj.Statements.Add(stClass);
+                }
+                financials.Pages.Add(pageObj);
+            }
+            return company;
         }
     }
 }

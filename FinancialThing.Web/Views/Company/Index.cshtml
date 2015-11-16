@@ -1,0 +1,73 @@
+﻿@using FinancialThing.Models
+@model IList<FinancialThing.Models.CompanyViewModel>
+
+
+@{
+    ViewBag.CurrentPage = "Company";
+    ViewBag.Title = "Company";
+    Layout = "~/Views/Shared/_FTLayout.cshtml";
+}
+<table class="companies_table">
+    <thead>
+        <tr>
+            <th class="name">Company name</th>
+            <th>Display?</th>
+            <th>Generate data</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (var i = 0; i < Model.Count; i++)
+        {
+            @Html.Partial("Partial/_Company", Model[i])
+        }
+
+    </tbody>
+</table>
+
+<table class="shifted">
+    <tbody>
+        <tr>
+            <td>
+                <a class="button blink" onclick="addCompany();">Add new</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="shifted">
+    <tbody>
+        <tr>
+            <td>
+                <a class="button blink" onclick="toggle(1)">Select all</a> <a class="button" onclick="toggle(0)">Unselect all</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div id="overlay_blur" class="normal">
+    
+</div>
+<div class="overlay hide">
+    <div class="bar">
+        <img class="close" src="~/Content/images/close.jpg" onclick="closeOverlay()"/>
+    </div>
+    <div class="content">
+        <div class="form-group">
+            <label for="company_name">Company name</label>
+            <input type="text" class="form-control text" id="company_name"/>
+        </div>
+        <div class="form-group">
+            <label for="company_name">Stock exchange</label>
+            <input type="text" class="form-control text" id="exch_name" />
+        </div>
+        <div class="form-group">
+            <a class="button blink" onclick="add();">Add</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#overlay_blur').height($('html').height());
+        $('#overlay_blur').width($('html').width());
+    });
+</script>

@@ -1,4 +1,5 @@
-﻿using FinancialThing.Models;
+﻿using FinancialThing.Configuration;
+using FinancialThing.Models;
 using FinancialThing.Services.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

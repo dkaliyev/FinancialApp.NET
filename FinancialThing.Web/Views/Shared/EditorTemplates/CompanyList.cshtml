@@ -1,0 +1,8 @@
+﻿@model IEnumerable<FinancialThing.Models.CompanyViewModel>
+
+    @foreach (var company in Model)
+    {
+        <div class="company_header">
+            <span class="link @company.Active" id="link-@company.Id" onclick="show('@company.Id')">@company.DisplayName</span>
+        </div>
+    }

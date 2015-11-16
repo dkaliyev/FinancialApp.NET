@@ -47,6 +47,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Autofac.WebApi2.3.4.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
     </Reference>
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -54,7 +58,7 @@
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\NHibernate.dll</HintPath>
+      <HintPath>..\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate.ByteCode.LinFu, Version=3.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -154,16 +158,17 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\CompanyController.cs" />
+    <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\DictionaryController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utilities\DataMappingConfiguration.cs" />
-    <Compile Include="Utilities\DataMappingConfigurationCollection.cs" />
-    <Compile Include="Utilities\DataMappingConfigurationEntry.cs" />
+    <Compile Include="Utilities\BrowserJsonFormatter.cs" />
     <Compile Include="Utilities\DictionaryHelper.cs" />
+    <Compile Include="Utilities\NewCompanyModelBinder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -211,6 +216,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FinancialThing.Configuration\FinancialThing.Configuration.csproj">
+      <Project>{8E3BF183-D732-451C-A349-D95BC6C98272}</Project>
+      <Name>FinancialThing.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FinancialThing.DataAccess\FinancialThing.DataAccess.csproj">
       <Project>{FD8387D7-7D1B-423E-B294-EE216983053E}</Project>
       <Name>FinancialThing.DataAccess</Name>
@@ -222,6 +231,10 @@
     <ProjectReference Include="..\FinancialThing.Models\FinancialThing.Models.csproj">
       <Project>{E95CED99-558E-4397-BC9D-606307FDA4EA}</Project>
       <Name>FinancialThing.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FinancialThing.Utilities\FinancialThing.Utilities.csproj">
+      <Project>{2750E3AB-8A17-4A60-8891-984EBB7E43E5}</Project>
+      <Name>FinancialThing.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

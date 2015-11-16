@@ -50,5 +50,10 @@ namespace FinancialThing.DataAccess.nHibernate
         {
             _session.Delete(entity);
         }
+
+        public void SaveOrUpdate(T entity)
+        {
+            _session.SaveOrUpdate(entity);
+        }
     }
 }

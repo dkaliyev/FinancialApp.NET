@@ -1,8 +1,7 @@
 ﻿using System.Configuration;
-using System.Diagnostics.SymbolStore;
 using System.Linq;
 
-namespace FinancialThing.Services.Utilities
+namespace FinancialThing.Configuration
 {
     public class DataMappingConfiguration: ConfigurationSection
     {

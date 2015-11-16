@@ -5,7 +5,7 @@
       <generator class="guid" />
     </id>
     <many-to-one name="Dictionary" class="FinancialThing.Models.Dictionary, FinancialThing.Models" cascade="none">
-      <column name="DictionaryId" sql-type="varchar" not-null="true"/>
+      <column name="DictionaryId" sql-type="varchar"/>
     </many-to-one>
     <many-to-one name="Financials" class="FinancialThing.Models.Financials, FinancialThing.Models">
       <column name="FinancialId" sql-type="varchar"/>

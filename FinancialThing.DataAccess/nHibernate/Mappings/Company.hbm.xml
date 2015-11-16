@@ -5,7 +5,7 @@
       <generator class="guid" />
     </id>
     <property name="FullName">
-      <column name="fullname" sql-type="varchar" not-null="true"/>
+      <column name="fullname" sql-type="varchar" />
     </property>
     <property name="StockName">
       <column name="stockname" sql-type="varchar" not-null="true"/>
@@ -13,6 +13,9 @@
     <property name ="DateAdded">
       <column name="dateadded" sql-type="date"/>
     </property>
+    <many-to-one name="StockExchange" class="FinancialThing.Models.StockExchange, FinancialThing.Models" cascade="none">
+      <column name="StockExchangeId" sql-type="varchar" not-null="true"/>
+    </many-to-one>
     <one-to-one name="Financials" class="FinancialThing.Models.Financials, FinancialThing.Models" cascade="all-delete-orphan" property-ref="Company" />    
   </class>
 </hibernate-mapping>

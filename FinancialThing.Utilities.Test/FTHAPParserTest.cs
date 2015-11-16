@@ -8,6 +8,7 @@ using System.Web.Http.Dependencies;
 using FinancialThing.DataAccess;
 using FinancialThing.IoC.AutoFac;
 using FinancialThing.Models;
+using FinancialThing.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHibernate;
@@ -21,6 +22,7 @@ namespace FinancialThing.Utilities.Test
 
         private IDependencyResolver resolver;
         private IRepository<Dictionary, Guid> dicRepository;
+        private IRepository<StockExchange, Guid> sexRepo;
         private IList<Dictionary> dictionaries;
         private ISessionFactory sessionFactory;
             
@@ -29,6 +31,7 @@ namespace FinancialThing.Utilities.Test
         {
             resolver = new TestingConfiguration().BuildResolver();
             dicRepository = (IRepository<Dictionary, Guid>)resolver.GetService(typeof(IRepository<Dictionary, Guid>));
+            sexRepo = (IRepository<StockExchange, Guid>)resolver.GetService(typeof(IRepository<StockExchange, Guid>));
             dictionaries = dicRepository.GetQuery().ToList();
             string BSbody = System.IO.File.ReadAllText("BS.html").Replace("\"", "");
             string CFBody = System.IO.File.ReadAllText("CF.html").Replace("\"", "");
@@ -57,17 +60,20 @@ namespace FinancialThing.Utilities.Test
         [TestMethod]
         public void TestParseMock()
         {
-            var parser = new FTHAPParser(mockGrabber.Object, dictionaries);
-            var company = parser.Parse("IMT", "LSE");
+            var parser = new FTHAPParser(mockGrabber.Object, dicRepository);
+            var company = parser.Parse("IMT", sexRepo.GetQuery().FirstOrDefault(d => d.Marker=="LSE"));
             Assert.AreEqual("Imperial Tobacco Group PLC".ToLower(), company.FullName.ToLower());
         }
 
         [TestMethod]
         public void TestParseWeb()
         {
-            var parser = new FTHAPParser(new FTDataGrabber(), dictionaries);
-            var company = parser.Parse("IMT", "LSE");
-
+            var parser = new FTHAPParser(new FTDataGrabber(), dicRepository);
+            var company = parser.Parse("IMT", sexRepo.GetQuery().FirstOrDefault(d => d.Marker == "LSE"));
+            Assert.AreEqual("Imperial Tobacco Group PLC".ToLower(), company.FullName.ToLower());
+            Assert.AreEqual(7, company.Financials.Pages.Where(p => p.Dictionary.Code == "IncomeStatement").FirstOrDefault().Statements.Where(s => s.Dictionary.Code == "NormalizedIncome").FirstOrDefault().Data.Count);
+            Assert.AreEqual(9, company.Financials.Pages.Where(p => p.Dictionary.Code == "IncomeStatement").FirstOrDefault().Statements.Where(s => s.Dictionary.Code == "IncomeTaxes").FirstOrDefault().Data.Count);
+            Assert.AreEqual(13, company.Financials.Pages.Where(p => p.Dictionary.Code == "BalanceSh").FirstOrDefault().Statements.Where(s => s.Dictionary.Code == "Assets").FirstOrDefault().Data.Count);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace FinancialThing.Services.Utilities
+namespace FinancialThing.Configuration
 {
     public class DataMappingConfigurationEntry: ConfigurationElement
     {
@@ -23,6 +23,13 @@ namespace FinancialThing.Services.Utilities
         {
             get { return (string)this["displayName"]; }
             set { this["displayName"] = value; }
+        }
+
+        [ConfigurationProperty("order")]
+        public string Order
+        {
+            get { return (string) this["order"]; }
+            set { this["order"] = value; }
         }
 
         [ConfigurationProperty("sections")]

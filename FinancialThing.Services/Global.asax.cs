@@ -4,7 +4,9 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Autofac.Integration.WebApi;
 using FinancialThing.IoC.AutoFac;
+using FinancialThing.Models;
 using FinancialThing.Services.Utilities;
+using Newtonsoft.Json;
 
 namespace FinancialThing.Services
 {
@@ -19,6 +21,7 @@ namespace FinancialThing.Services
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             GlobalConfiguration.Configuration.DependencyResolver = new AutoFacConfiguration().BuildResolver();
+            
         }
     }
 }

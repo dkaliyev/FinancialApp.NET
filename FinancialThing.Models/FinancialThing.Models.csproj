@@ -44,6 +44,7 @@
     <Compile Include="CashFlow.cs" />
     <Compile Include="CommonStockDividends.cs" />
     <Compile Include="Company.cs" />
+    <Compile Include="CompanyDetails.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Dictionary.cs" />
     <Compile Include="Entity.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Investing.cs" />
     <Compile Include="Liabilities.cs" />
     <Compile Include="NetChangeInCash.cs" />
+    <Compile Include="NewCompany.cs" />
     <Compile Include="NormalizedIncome.cs" />
     <Compile Include="OperatingExpenses.cs" />
     <Compile Include="Operations.cs" />

@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet/less" type="text/css" href="~/Content/less/style.less" />
+    <title>@ViewBag.Title</title>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/toastr")
+    @Scripts.Render("~/bundles/shared")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/less")
+</head>
+<body>
+    <div class="sidebar">
+        @Html.Partial("Partial/_SideMenu")
+    </div>
+    <div class="main_container">
+        @RenderBody()
+    </div>
+</body>
+</html>

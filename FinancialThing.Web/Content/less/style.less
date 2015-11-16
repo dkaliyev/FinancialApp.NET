@@ -1,0 +1,314 @@
+﻿@import "colors";
+@import "toggle";
+
+@font-face {
+    font-family: BebasReg;
+    src: url("../../fonts/BebasNeue_Regular.otf");
+}
+
+@font-face {
+    font-family: UbuntuReg;
+    src: url("../../fonts/Ubuntu-Regular.ttf");
+}
+
+@menu_font_size: 25px;
+@table_header_font_size: 20px;
+
+*::after, *::before {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: @dark;
+}
+
+h2 {
+    font-family: BebasReg;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.sidebar {
+    width: 12%;
+    height: 1000px;
+    border-right: 1px solid @light_menu;
+    position: fixed;
+}
+
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
+}
+
+.main_container {
+    width: 85%;
+    margin-left: 12%;
+    height: 800px;
+    float: left;
+    color: @menu_font;
+
+    .data {
+        float: left;
+        width: 33%;
+    }
+
+    #companies_header {
+        width: 100%;
+        float: left;
+        margin-top: 60px;
+        font-family: BebasReg;
+
+        .company_header {
+            padding: 20px 20px;
+            float: left;
+
+            span {
+                border-bottom: 1px @light_row solid;
+                cursor: pointer;
+
+                &:hover, &.show {
+                    border-bottom: 2px lighten(@light_row, 30%) solid;
+                }
+
+                &.hide {
+                    display:block;
+                }
+
+                /*&.active {
+                    border-bottom: 2px lighten(@light_row, 30%) solid;
+                }*/
+            }
+        }
+    }
+
+    .row {
+        width: 100%;
+        float: left;
+    }
+
+    .company {
+        position: absolute;
+        width: 80%;
+    }
+
+    .stmnt_class {
+        font-size: 30px;
+        margin: 20px;
+        text-align: center;
+    }
+
+    .class_header {
+        font-family: BebasReg;
+        padding-top: 35px;
+        padding-bottom: 15px;
+        font-size: 20px;
+    }
+
+    #data_table {
+        //float:left;
+        margin: 20px 20px;
+        font-family: UbuntuReg;
+        margin-top: 60px;
+    }
+}
+
+#overlay_blur {
+    top: 0px;
+    left: 0px;
+    position: absolute;
+    &.blured {
+        display:block;
+        z-index: 30;
+        -webkit-filter: blur(20px);
+        -moz-filter: blur(15px);
+        -o-filter: blur(15px);
+        -ms-filter: blur(15px);
+        filter: blur(15px);
+        opacity: 0.95;
+        background:@dark;
+    }
+    &.normal {
+        display:none;
+        z-index: 0;
+    }
+}
+
+.companies_table {
+    margin-left: 50px;
+    margin-top: 50px;
+    color: @menu_font;
+
+    th {
+        font-size: @table_header_font_size;
+        padding-right: 40px;
+
+        &.name {
+            width: 250px;
+            text-align: left;
+        }
+    }
+
+    thead {
+        height: 50px;
+    }
+
+    tbody {
+        tr {
+            &.row_odd {
+                background-color: @light_row;
+            }
+        }
+
+        td {
+            &.label {
+                padding-top: 20px;
+            }
+
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+    }
+}
+
+.shifted {
+    margin-left: 50px;
+}
+
+a.button {
+    background-image: -moz-linear-gradient(center bottom, #ebebeb 0%, #ececec 50%, #f3f3f3 50%, #ffffff 100%);
+    border: 1px solid #9a9a9a;
+    border-color: #5a5caf #56578f #52536f;
+    border-radius: 4px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 1) inset, 0 1px 0 rgba(0, 0, 0, 0.09);
+    color: #000;
+    display: inline-block;
+    font-family: "Lucida Grande","Lucida Sans Unicode",sans-serif;
+    font-size: 11px;
+    font-weight: normal;
+    height: 19px;
+    line-height: 19px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.09);
+    padding: 0 20px;
+
+    &.select_all {
+    }
+
+    &.blink {
+        background-image: -moz-linear-gradient(center bottom, #d3f7fd 0%, #87c5fb 50%, #a1d1f9 50%, #d4e9fc 100%);
+        box-shadow: 0 19px 0 rgba(0, 115, 215, 0.3) inset, 0 1px 0 rgba(255, 255, 255, 1) inset, 0 1px 0 rgba(0, 0, 0, 0.09);
+        font-size: 12px;
+        margin: 25px 0;
+        padding: 0 20px;
+        text-align: center;
+        cursor: pointer;
+
+        &.inline {
+            margin-top: 20px;
+            margin-bottom: 0px;
+            padding: 0 15px;
+        }
+    }
+}
+
+.logo {
+    height: 120px;
+}
+
+.menu {
+    padding-left: 10%;
+    padding-right: 30px;
+
+    .menu_row {
+        display: block;
+        position: relative;
+        height: @menu_font_size;
+        line-height: @menu_font_size;
+        width: 100%;
+        margin-bottom: 15px;
+        padding-left: 5px;
+
+        &.selected {
+            border-left: 2px solid #2a9fd6;
+            padding-left: 10px;
+        }
+
+
+        a {
+            display: block;
+            color: darken(@menu_font, 30%);
+            text-decoration: none;
+            font-size: @menu_font_size;
+            position: relative;
+            height: 100%;
+            font-family: BebasReg;
+            font-weight: 700;
+
+            &:hover {
+                color: @menu_font;
+            }
+        }
+
+        &.menu_row_dark {
+            background-color: @dark;
+        }
+
+        &.menu_row_light {
+            background-color: @dark;
+        }
+    }
+}
+
+.overlay {
+    width: 40%;
+    height: 300px;
+    position: absolute;
+    border: 1px solid;
+    left: 30%;
+    top: 10%;
+    &.show {
+        z-index: 31;
+        display: block;
+    }
+
+    &.hide {
+        display: none;
+    }
+
+    .bar {
+        width: 100%;
+        height: 7%;
+        background-color: #b3b3b3;
+        .close {
+            float: left;
+            height: 20px;
+        }
+    }
+
+    .content {
+        width: 90%;
+        height: 73%;
+        padding: 5% 5%
+    }
+
+}
+
+.form-group {
+    padding: 20px 20px 20px 20px;
+    font-size: 20px;
+    line-height: 30px;
+    .form-control {
+        margin-left: 15px;
+        &.text {
+            border-radius: 7px;
+            border: 1px solid;
+            line-height: 20px;
+            padding-left: 5px;
+        }
+    }
+}

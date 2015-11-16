@@ -4,8 +4,14 @@
     <id name="Id" type="guid">
       <generator class="guid" />
     </id>
+    <property name="MinYear">
+      <column name="MinYear" sql-type="int"/>
+    </property>
+    <property name="MaxYear">
+      <column name="MaxYear" sql-type="int"/>
+    </property>
     <many-to-one name="Company" class="FinancialThing.Models.Company, FinancialThing.Models">
-      <column name="companyid" sql-type="varchar" not-null="true"/>
+      <column name="companyid" sql-type="varchar"/>
     </many-to-one>
     <set name="Pages" cascade="all-delete-orphan">
       <key column="FinancialId"/>

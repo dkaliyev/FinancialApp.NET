@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Dependencies;
 using FinancialThing.Services.Utilities;
@@ -15,6 +16,7 @@ namespace FinancialThing.Services
 
             // Web API routes
             config.MapHttpAttributeRoutes();
+            //config.Formatters.Add(new BrowserJsonFormatter());
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

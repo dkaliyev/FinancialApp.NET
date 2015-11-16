@@ -2,7 +2,7 @@
 using System.Configuration;
 using System.Linq;
 
-namespace FinancialThing.Services.Utilities
+namespace FinancialThing.Configuration
 {
     public class DataMappingConfigurationCollection: ConfigurationElementCollection, IEnumerable<DataMappingConfigurationEntry>
     {

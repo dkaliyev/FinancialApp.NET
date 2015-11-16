@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{ADA28237-31BF-4DA4-BDF1-06830AE48B91}</ProjectGuid>
+    <ProjectGuid>{2750E3AB-8A17-4A60-8891-984EBB7E43E5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FinancialThing.Utilities</RootNamespace>
@@ -33,6 +33,14 @@
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\FinancialThing.Services\bin\NHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -47,10 +55,18 @@
     <Compile Include="FTDataGrabber.cs" />
     <Compile Include="FTHAPParser.cs" />
     <Compile Include="IDataGrabber.cs" />
+    <Compile Include="IDataMerger.cs" />
     <Compile Include="IParser.cs" />
+    <Compile Include="FTJsonSerializer.cs" />
+    <Compile Include="NHibernateContractResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleDataMerger.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FinancialThing.Configuration\FinancialThing.Configuration.csproj">
+      <Project>{8E3BF183-D732-451C-A349-D95BC6C98272}</Project>
+      <Name>FinancialThing.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FinancialThing.DataAccess\FinancialThing.DataAccess.csproj">
       <Project>{FD8387D7-7D1B-423E-B294-EE216983053E}</Project>
       <Name>FinancialThing.DataAccess</Name>
@@ -58,10 +74,6 @@
     <ProjectReference Include="..\FinancialThing.Models\FinancialThing.Models.csproj">
       <Project>{E95CED99-558E-4397-BC9D-606307FDA4EA}</Project>
       <Name>FinancialThing.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FinancialThing.Services\FinancialThing.Services.csproj">
-      <Project>{26F66616-CD1F-4F15-89A7-F9F7E1444B6B}</Project>
-      <Name>FinancialThing.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

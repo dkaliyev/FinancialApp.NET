@@ -56,9 +56,11 @@ namespace FinancialThing.Services.Controllers
         }
 
         // POST api/values
-        public void Post(string value)
+        [HttpPost]
+        public void Post()
         {
-            
+            DictionaryHelper.InsertDicionaries(_repo);
+            _uow.Commit();
         }
 
         // PUT api/values/5
