@@ -11,12 +11,8 @@ namespace FinancialThing.ConsoleApp
     {
         static void Main(string[] args)
         {
-            var grabber = new FTDataGrabber();
-            string result =
-                grabber.Grab(
-                    "http://markets.ft.com/research/Markets/Tearsheets/Financials?s=IMT:LSE&subview=BalanceSheet");
-            Console.WriteLine(result);
-            Console.Read();
+            var fileDownloader = new FileDownloader();
+            fileDownloader.GetFile("http://real-chart.finance.yahoo.com/table.csv?s=FB&a=06&b=19&c=1990&d=10&e=22&f=2015&g=d&ignore=.csv", "~/Data/File1.csv");
         }
     }
 }

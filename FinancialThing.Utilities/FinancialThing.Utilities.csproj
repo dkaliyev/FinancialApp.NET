@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileDownloader.cs" />
     <Compile Include="FTDataGrabber.cs" />
     <Compile Include="FTHAPParser.cs" />
     <Compile Include="IDataGrabber.cs" />
