@@ -14,7 +14,13 @@
       <column name="dateadded" sql-type="date"/>
     </property>
     <many-to-one name="StockExchange" class="FinancialThing.Models.StockExchange, FinancialThing.Models" cascade="none">
-      <column name="StockExchangeId" sql-type="varchar" not-null="true"/>
+      <column name="StockExchangeId" sql-type="varchar"/>
+    </many-to-one>
+    <many-to-one name="Sector" class="FinancialThing.Models.Sector, FinancialThing.Models" cascade="none">
+      <column name="SectorId" sql-type="varchar"/>
+    </many-to-one>
+    <many-to-one name="Industry" class="FinancialThing.Models.Industry, FinancialThing.Models" cascade="none">
+      <column name="IndustryId" sql-type="varchar"/>
     </many-to-one>
     <one-to-one name="Financials" class="FinancialThing.Models.Financials, FinancialThing.Models" cascade="all-delete-orphan" property-ref="Company" />    
   </class>

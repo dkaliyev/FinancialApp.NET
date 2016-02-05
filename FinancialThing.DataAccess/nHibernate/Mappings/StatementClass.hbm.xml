@@ -14,8 +14,5 @@
       <key column="StatementClassId"/>
       <one-to-many class="FinancialThing.Models.Data"/>
     </set>
-    <!-->joined-subclass table="assets" name="FinancialThing.Models.Assets, FinancialThing.Models">
-      <key column="StatementClassId"/>
-    </-->
   </class>
 </hibernate-mapping>

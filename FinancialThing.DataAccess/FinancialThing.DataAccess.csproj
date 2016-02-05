@@ -48,13 +48,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="ICategoryEntryServiceRepository.cs" />
+    <Compile Include="IDatabaseRepository.cs" />
+    <Compile Include="IDataServiceRepository.cs" />
+    <Compile Include="IDictionaryServiceRepository.cs" />
+    <Compile Include="IIndustryServiceRepository.cs" />
+    <Compile Include="IRatioServiceRepository.cs" />
+    <Compile Include="IRatioValueServiceRepository.cs" />
     <Compile Include="IRepository.cs" />
+    <Compile Include="ICompanyServiceRepository.cs" />
+    <Compile Include="ISectorServiceRepository.cs" />
+    <Compile Include="IStockExchangeServiceRepository.cs" />
     <Compile Include="IUnitOfWork.cs" />
-    <Compile Include="nHibernate\Repository.cs" />
+    <Compile Include="nHibernate\DatabaseRepository.cs" />
     <Compile Include="nHibernate\UnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FinancialThing.DTO\FinancialThing.DTO.csproj">
+      <Project>{1B444979-02B6-405D-9019-3A2555B46A48}</Project>
+      <Name>FinancialThing.DTO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FinancialThing.Models\FinancialThing.Models.csproj">
       <Project>{E95CED99-558E-4397-BC9D-606307FDA4EA}</Project>
       <Name>FinancialThing.Models</Name>
@@ -78,7 +92,9 @@
     <EmbeddedResource Include="nHibernate\Mappings\StatementClass.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="nHibernate\Mappings\Company.hbm.xml" />
+    <EmbeddedResource Include="nHibernate\Mappings\Company.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="nHibernate\Mappings\Financials.hbm.xml" />
     <EmbeddedResource Include="nHibernate\Mappings\Page.hbm.xml" />
   </ItemGroup>
@@ -87,6 +103,27 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="nHibernate\Mappings\StockExchange.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="nhibernate.cfg.xml" />
+    <EmbeddedResource Include="nHibernate\Mappings\RatioValue.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="nHibernate\Mappings\Industry.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="nHibernate\Mappings\Sector.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="nHibernate\Mappings\Category.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="nHibernate\Mappings\CategoryEntry.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="nHibernate\Mappings\Ratio.hbm.xml" />
+    <EmbeddedResource Include="nHibernate\Mappings\TotalAssets..hbm.xml" />
+    <EmbeddedResource Include="nHibernate\Mappings\TotalRevenue.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

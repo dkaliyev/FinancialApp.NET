@@ -46,5 +46,12 @@ namespace FinancialThing.Configuration
             set { this["data"] = value; }
         }
 
+        [ConfigurationProperty("count")]
+        public string Count
+        {
+            get { return (string)this["count"]; }
+            set { this["count"] = value; }
+        }
+
     }
 }

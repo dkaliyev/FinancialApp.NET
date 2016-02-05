@@ -1,0 +1,23 @@
+﻿<hibernate-configuration xmlns="urn:nhibernate-configuration-2.2-x-factories">
+
+  <session-factory name="Development">
+    <property name="connection.provider">NHibernate.Connection.DriverConnectionProvider</property>
+    <property name="dialect">NHibernate.Dialect.MsSql2012Dialect</property>
+    <property name="connection.driver_class">NHibernate.Driver.SqlClientDriver</property>
+
+    <property name="show_sql">true</property>
+
+    <mapping assembly="FinancialThing.DataAccess" />
+  </session-factory>
+
+  <session-factory name="Production">
+    <property name="connection.provider">NHibernate.Connection.DriverConnectionProvider</property>
+    <property name="dialect">NHibernate.Dialect.MsSql2008Dialect</property>
+    <property name="connection.driver_class">NHibernate.Driver.SqlClientDriver</property>
+
+    <property name="show_sql">false</property>
+
+    <mapping assembly="FinancialThing.DataAccess" />
+  </session-factory>
+
+</hibernate-configuration>

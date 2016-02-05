@@ -28,7 +28,7 @@ namespace FinancialThing.IoC.AutoFac
             builder.RegisterInstance(sessionFactory).As<ISessionFactory>().SingleInstance();
             builder.Register(x => x.Resolve<ISessionFactory>().OpenSession()).As<ISession>();
             builder.Register(x => new UnitOfWork(x.Resolve<ISession>())).As<IUnitOfWork>();
-            builder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<,>));
+            builder.RegisterGeneric(typeof(DatabaseRepository<>)).As(typeof(IRepository<,>));
 
             var container = builder.Build();
             var resolver = new AutofacWebApiDependencyResolver(container);

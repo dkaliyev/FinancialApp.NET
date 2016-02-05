@@ -12,5 +12,8 @@ namespace FinancialThing.Models
 
         public virtual int MinYear { get; set; }
         public virtual int MaxYear { get; set; }
+
+        public virtual ISet<TotalAssets> TotalAssets { get; set; }
+        public virtual ISet<TotalRevenue> TotalRevenue { get; set; }
     }
 }

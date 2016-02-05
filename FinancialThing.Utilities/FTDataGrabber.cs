@@ -30,7 +30,7 @@ namespace FinancialThing.Utilities
             using (var client = new System.Net.WebClient())
             {
                 client.Headers[HttpRequestHeader.ContentType] = "application/json";
-                return Encoding.ASCII.GetString(client.UploadData(url, "POST", Encoding.ASCII.GetBytes(data)));
+                return Encoding.ASCII.GetString(client.UploadData(url, "POST", Encoding.ASCII.GetBytes(data??"")));
             }
         }
     }

@@ -16,7 +16,7 @@ namespace FinancialThing.Configuration
             return ((DataMappingConfigurationEntry) element);
         }
 
-        public IEnumerator<DataMappingConfigurationEntry> GetEnumerator()
+        public new IEnumerator<DataMappingConfigurationEntry> GetEnumerator()
         {
             return this.OfType<DataMappingConfigurationEntry>().GetEnumerator();
         }

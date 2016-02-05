@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
+  <class name ="FinancialThing.Models.TotalAssets, FinancialThing.Models" table="totalassets">
+    <id name="Id" type="guid">
+      <generator class="guid" />
+    </id>
+    <many-to-one name="Financials" class="FinancialThing.Models.Financials, FinancialThing.Models">
+      <column name="FinancialId" sql-type="varchar"/>
+    </many-to-one>
+    <property name="Value">
+      <column name="value" sql-type="varchar"/>
+    </property>
+    <property name="Year">
+      <column name="year" sql-type="varchar"/>
+    </property>
+  </class>
+</hibernate-mapping>

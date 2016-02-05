@@ -12,27 +12,30 @@ namespace FinancialThing.Services.Controllers
 {
     public class DataController: ApiController
     {
-        private IRepository<Company, Guid> _companyRepository;
+        private IDatabaseRepository<Company, Guid> _companyRepository;
         private IParser<Company, StockExchange> _parser;
-        private IRepository<StockExchange, Guid> _sexRepository;
-        private IRepository<Dictionary, Guid> _dictionaryRepository;
         private IDataMerger<Company> _dataMerger;
         private IUnitOfWork _uow;
 
-        public DataController(IRepository<StockExchange, Guid> sexRepo, IRepository<Company, Guid> companyRepository, IRepository<Dictionary, Guid> dictionaryRepository, IParser<Company, StockExchange> parser, IUnitOfWork uow,
-            IDataMerger<Company> dataMerger)
+        public DataController(IDatabaseRepository<Company, Guid> companyRepository, 
+            IParser<Company, StockExchange> parser, IUnitOfWork uow, IDataMerger<Company> dataMerger)
         {
             _companyRepository = companyRepository;
-            _sexRepository = sexRepo;
             _parser = parser;
             _uow = uow;
-            _dictionaryRepository = dictionaryRepository;
             _dataMerger = dataMerger;
         }
 
         public HttpResponseMessage Get()
         {
             var companies = _companyRepository.GetQuery();
+
+            return FTJsonSerializer.Serialize(companies);
+        }
+
+        public HttpResponseMessage Get(Guid id)
+        {
+            var companies = _companyRepository.GetById(id);
 
             return FTJsonSerializer.Serialize(companies);
         }
@@ -59,6 +62,8 @@ namespace FinancialThing.Services.Controllers
             if (oldCompany != null)
             {
                 var newCompany = _parser.Parse(oldCompany.StockName, oldCompany.StockExchange);
+                if(newCompany==null)
+                    return new HttpResponseMessage();
                 _dataMerger.Merge(oldCompany, newCompany);
                 _companyRepository.Update(oldCompany);
                 _uow.Commit();

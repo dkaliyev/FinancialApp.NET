@@ -20,7 +20,8 @@ namespace FinancialThing.Services.Utilities
                 {
                     Code = page.Code,
                     DisplayName = page.DisplayName,
-                    Order = page.Order
+                    Order = page.Order,
+                    ParentCode = "FI"
                 });
                 foreach (var section in page.Sections)
                 {
@@ -28,7 +29,8 @@ namespace FinancialThing.Services.Utilities
                     {
                         Code = section.Code,
                         DisplayName = section.DisplayName,
-                        Order = section.Order
+                        Order = section.Order,
+                        ParentCode = page.Code
                     });
                     foreach (var datum in section.Data)
                     {
@@ -36,7 +38,8 @@ namespace FinancialThing.Services.Utilities
                         {
                             Code = datum.Code,
                             DisplayName = datum.DisplayName,
-                            Order = datum.Order
+                            Order = datum.Order,
+                            ParentCode = section.Code
                         });
                     }
                 }

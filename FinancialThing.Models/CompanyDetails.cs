@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace FinancialThing.Models
 {
-    public class CompanyDetails
+    public class CompanyDetails: Entity
     {
-        public Guid Id { get; set; }
         public string FullName { get; set; }
         public string StockName { get; set; }
+        public string Code { get; set; }
+        public CategoryEntry Sector { get; set; }
+        public CategoryEntry Industry { get; set; }
     }
 }

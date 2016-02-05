@@ -11,5 +11,7 @@ namespace FinancialThing.Models
         public virtual ISet<StatementClass> Statements { get; set; } 
         public virtual Dictionary Dictionary { get; set; }
         public virtual Financials Financials { get; set; }
+        public virtual int MaxYear { get; set; }
+        public virtual int MinYear { get; set; }
     }
 }

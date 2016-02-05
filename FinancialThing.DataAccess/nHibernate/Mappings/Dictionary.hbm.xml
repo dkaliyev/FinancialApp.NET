@@ -10,6 +10,9 @@
     <property name="Code">
       <column name="Code" sql-type="varchar" not-null="true" />
     </property>
+    <property name="ParentCode">
+      <column name="ParentCode" sql-type="varchar" not-null="true" />
+    </property>
     <property name="Order">
       <column name="OrderN" sql-type="varchar" not-null="true" />
     </property>

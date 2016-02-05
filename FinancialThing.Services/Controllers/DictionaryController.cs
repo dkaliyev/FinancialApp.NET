@@ -21,29 +21,16 @@ namespace FinancialThing.Services.Controllers
 {
     public class DictionaryController : ApiController
     {
-        private readonly IRepository<Dictionary, Guid> _repo;
-        private readonly IRepository<Data, Guid> _dataRepo;
+        private readonly IDatabaseRepository<Dictionary, Guid> _repo;
         private IUnitOfWork _uow;
-        public DictionaryController(IRepository<Dictionary, Guid> dictionaryRepository, IRepository<Data, Guid> dataRepository, IUnitOfWork uow)
+        public DictionaryController(IDatabaseRepository<Dictionary, Guid> dictionaryRepository, IUnitOfWork uow)
         {
             _repo = dictionaryRepository;
-            _dataRepo = dataRepository;
             _uow = uow;
         }
         // GET api/values
         public IEnumerable<Dictionary> Get()
         {
-            var dic = _repo.FindBy(x => x.Code == "LTI");
-
-            var data = new Data()
-            {
-                Dictionary = dic
-            };
-
-            _dataRepo.Add(data);
-
-            _uow.Commit();
-
             var dics = _repo.GetQuery();
 
             return dics;

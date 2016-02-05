@@ -74,6 +74,7 @@ namespace FinancialThing.Utilities.Test
             Assert.AreEqual(7, company.Financials.Pages.Where(p => p.Dictionary.Code == "IncomeStatement").FirstOrDefault().Statements.Where(s => s.Dictionary.Code == "NormalizedIncome").FirstOrDefault().Data.Count);
             Assert.AreEqual(9, company.Financials.Pages.Where(p => p.Dictionary.Code == "IncomeStatement").FirstOrDefault().Statements.Where(s => s.Dictionary.Code == "IncomeTaxes").FirstOrDefault().Data.Count);
             Assert.AreEqual(13, company.Financials.Pages.Where(p => p.Dictionary.Code == "BalanceSh").FirstOrDefault().Statements.Where(s => s.Dictionary.Code == "Assets").FirstOrDefault().Data.Count);
+            Assert.AreEqual(7, company.Financials.Pages.Where(p => p.Dictionary.Code == "CashFlow").FirstOrDefault().Statements.Where(s => s.Dictionary.Code == "operations").FirstOrDefault().Data.Count);
         }
     }
 }

@@ -7,5 +7,8 @@
     <property name="Marker">
       <column name="Marker" sql-type="varchar" not-null="true" />
     </property>
+    <property name="DisplayName">
+      <column name="DisplayName" sql-type="varchar" not-null="false" />
+    </property>
   </class>
 </hibernate-mapping>

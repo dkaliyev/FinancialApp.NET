@@ -14,8 +14,11 @@
       <key column="PageId"/>
       <one-to-many class="FinancialThing.Models.StatementClass"/>
     </set>
-    <!-->joined-subclass table="balancesheet" name="FinancialThing.Models.BalanceSheet, FinancialThing.Models">
-      <key column="PageId"/>
-    </-->
+    <property name="MaxYear">
+      <column name="MaxYear" sql-type="int" />
+    </property>
+    <property name="MinYear">
+      <column name="MinYear" sql-type="int" />
+    </property>
   </class>
 </hibernate-mapping>

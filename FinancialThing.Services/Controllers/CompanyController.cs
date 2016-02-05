@@ -16,72 +16,52 @@ namespace FinancialThing.Services.Controllers
 {
     public class CompanyController : ApiController
     {
-        private IRepository<Company, Guid> _companyRepository;
+        private IDatabaseRepository<Company, Guid> _companyRepository;
         private IParser<Company, StockExchange> _parser;
-        private IRepository<StockExchange, Guid> _sexRepository;
-        private IRepository<Dictionary, Guid> _dictionaryRepository;
-        private IDataMerger<Company> _dataMerger; 
         private IUnitOfWork _uow;
 
-        public CompanyController(IRepository<StockExchange, Guid> sexRepo, IRepository<Company, Guid> companyRepository, IRepository<Dictionary, Guid> dictionaryRepository, IParser<Company, StockExchange> parser, IUnitOfWork uow,
-            IDataMerger<Company> dataMerger)
+        public CompanyController(IDatabaseRepository<Company, Guid> companyRepository,
+            IParser<Company, StockExchange> parser, IUnitOfWork uow)
         {
             _companyRepository = companyRepository;
-            _sexRepository = sexRepo;
             _parser = parser;
             _uow = uow;
-            _dictionaryRepository = dictionaryRepository;
-            _dataMerger = dataMerger;
         }
         public HttpResponseMessage GetAll()
         {
-            var companies = _companyRepository.GetQuery().Select(x => new CompanyDetails() { Id = x.Id, FullName = x.FullName, StockName = x.StockName});
+            var companies = _companyRepository.GetQuery().Select(x => new Company() { Id = x.Id, FullName = x.FullName, StockName = x.StockName, StockExchange = x.StockExchange, Industry = x.Industry, Sector = x.Sector});
 
             return FTJsonSerializer.Serialize(companies);
         }
 
         public HttpResponseMessage Get(Guid id)
         {
-            var company = _companyRepository.GetQuery().Where(c=>c.Id == id).Select(x => new { FullName = x.FullName, StockName = x.StockName });
+            var company = _companyRepository.GetQuery().Where(c => c.Id == id).Select(x => new Company() { Id = x.Id, FullName = x.FullName, StockName = x.StockName, StockExchange = x.StockExchange, Industry = x.Industry, Sector = x.Sector });
             return FTJsonSerializer.Serialize(company);
         }
 
         [HttpPost]
-        public HttpResponseMessage Post(NewCompany newCompany)
+        public HttpResponseMessage Post(Company newCompany)
         {
-            var sex = _sexRepository.GetQuery().FirstOrDefault(x => x.Marker == newCompany.StockName);
-            if (sex == null)
-            {
-                sex = new StockExchange()
-                {
-                    Marker = newCompany.StockName,
-                    DateAdded = DateTime.Now
-                };
-                _sexRepository.Add(sex);
-            }
-            var company = _companyRepository.FindBy(c => c.StockName == newCompany.Code);
+            var company = _companyRepository.FindBy(c => c.StockName == newCompany.StockName);
             if (company != null)
             {
-                return FTJsonSerializer.Serialize(new NewCompany(){Code = "None"});
+                return FTJsonSerializer.Serialize(new CompanyDetails() { Code = "None" });
             }
-            company = new Company()
-            {
-                StockName = newCompany.Code,
-                StockExchange = sex,
-                DateAdded = DateTime.Now
-            };
+            
 
-            var compFullName = _parser.GetCompanyName(newCompany.Code, sex);
+            var compFullName = _parser.GetCompanyName(newCompany.StockName, newCompany.StockExchange);
             if (compFullName != null)
             {
-                company.FullName = compFullName;
-                var id = _companyRepository.Add(company);
-                _uow.Commit();
                 newCompany.FullName = compFullName;
-                newCompany.Id = id;
+                newCompany.DateAdded = DateTime.Today;
+                var id = _companyRepository.Add(newCompany);
+                _uow.Commit();
+                //newCompany.FullName = compFullName;
+                newCompany.Id = id.Id;
                 return FTJsonSerializer.Serialize(newCompany);
             }
-            return FTJsonSerializer.Serialize(new NewCompany(){Code = "None"});
+            return FTJsonSerializer.Serialize(new CompanyDetails() { Code = "None" });
         }
 
 

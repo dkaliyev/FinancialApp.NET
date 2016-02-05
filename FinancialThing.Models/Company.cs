@@ -10,5 +10,7 @@ namespace FinancialThing.Models
         public virtual string StockName { get; set; }
         public virtual StockExchange StockExchange { get; set; }
         public virtual Financials Financials { get; set; }
+        public virtual Sector Sector { get; set; }
+        public virtual Industry Industry { get; set; }
     }
 }

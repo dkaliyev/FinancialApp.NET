@@ -127,7 +127,7 @@ namespace FinancialThing.DataAccess.Test
 
             var session = sessionFactory.OpenSession();
             uow = new UnitOfWork(session);
-            companyRepo = new Repository<Company>(session);
+            companyRepo = new DatabaseRepository<Company>(session);
             var company2 = new Company()
             {
                 FullName = "Test Company",
@@ -155,7 +155,7 @@ namespace FinancialThing.DataAccess.Test
 
             uow.Commit();
             
-            var rescompany = companyRepo.GetById(res);
+            var rescompany = companyRepo.GetById(res.Id);
 
             #endregion
 
@@ -170,7 +170,7 @@ namespace FinancialThing.DataAccess.Test
         {
             var session = sessionFactory.OpenSession();
             uow = new UnitOfWork(session);
-            var statementsClassRepo = new Repository<StatementClass>(session);
+            var statementsClassRepo = new DatabaseRepository<StatementClass>(session);
             var statement = statementsClassRepo.GetById(new Guid("01fb145e-c65e-4de3-8dfe-7b20eecdcf29"));
             
             statementsClassRepo.Update(statement);

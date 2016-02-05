@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using FinancialThing.Configuration;
 using FinancialThing.DataAccess;
 using FinancialThing.Models;
@@ -18,9 +19,12 @@ namespace FinancialThing.Utilities
         private string Url { get; set; }
         private string CompanyName { get; set; }
 
+        string pattern = "[()]";
+        private Regex _rgx;
 
         public FTHAPParser(IDataGrabber grabber, IRepository<Dictionary, Guid> dicRepository)
         {
+            _rgx = new Regex(pattern);
             _grabber = grabber;
             _dictionaries = dicRepository.GetQuery();
             
@@ -120,6 +124,10 @@ namespace FinancialThing.Utilities
 
             financials.Pages = new HashSet<Page>();
 
+            financials.TotalAssets = new HashSet<TotalAssets>();
+
+            financials.TotalRevenue = new HashSet<TotalRevenue>();
+
             financials.Company = company;
 
             var companyNameHtml = _grabber.Grab(string.Format(CompanyName, name, exchange.Marker));
@@ -142,10 +150,11 @@ namespace FinancialThing.Utilities
                 bsHtmlDoc.LoadHtml(bsHtml);
                 var mainBody = bsHtmlDoc.DocumentNode.Descendants("body").FirstOrDefault();
                 var bodies = GetBodies(mainBody);
-
+                if (bodies.Count() != int.Parse(page.Count))
+                    return null;
                 var years = GetYears(bsHtmlDoc);
-                company.Financials.MinYear = years.Min();
-                company.Financials.MaxYear = years.Max();
+                pageObj.MaxYear = years.Max();
+                pageObj.MinYear = years.Min();
                 pageObj.Statements = new HashSet<StatementClass>();
                 foreach (var statementClass in page.Sections)
                 {
@@ -168,19 +177,32 @@ namespace FinancialThing.Utilities
 
                         data.StatementClass = stClass;
                         data.Dictionary =
-                            _dictionaries.FirstOrDefault(d => d.DisplayName.ToLower().Contains(dataName.ToLower().Split('&')[0]));
-                        if (data.Dictionary == null)
-                        {
-                            
-                        }
+                            _dictionaries.FirstOrDefault(d => d.DisplayName.ToLower().Equals(dataName.ToLower())&&d.ParentCode.Equals(stClass.Dictionary.Code));
+                        
                         data.Values = new HashSet<Value>();
                         for (int i = 0; i < yearCount; i++)
                         {
                             var value = new Value();
                             value.Data = data;
                             value.Year = years[i].ToString();
-                            value.DataValue = values[i];
+                            value.DataValue = _rgx.Replace(values[i], "");
                             data.Values.Add(value);
+                            if (data.Dictionary.Code == "TR")
+                            {
+                                var totalRevenue = new TotalRevenue();
+                                totalRevenue.Financials = financials;
+                                totalRevenue.Value = Convert.ToSingle(value.DataValue);
+                                totalRevenue.Year = int.Parse(value.Year);
+                                financials.TotalRevenue.Add(totalRevenue);
+                            }
+                            if (data.Dictionary.Code == "TA")
+                            {
+                                var totalAsssets = new TotalAssets();
+                                totalAsssets.Financials = financials;
+                                totalAsssets.Value = Convert.ToSingle(value.DataValue);
+                                totalAsssets.Year = int.Parse(value.Year);
+                                financials.TotalAssets.Add(totalAsssets);
+                            }
                         }
                         stClass.Data.Add(data);
                     }
