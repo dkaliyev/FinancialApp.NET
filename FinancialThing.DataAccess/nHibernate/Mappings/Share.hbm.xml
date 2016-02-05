@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
+  <class name ="FinancialThing.Models.Share, FinancialThing.Models" table="shares">
+    <id name="Id" type="guid">
+      <generator class="guid" />
+    </id>
+    <property name="Open">
+      <column name="Open" sql-type="double"/>
+    </property>
+    <property name="Close">
+      <column name="Close" sql-type="double"/>
+    </property>
+    <property name="High">
+      <column name="High" sql-type="double"/>
+    </property>
+    <property name="Low">
+      <column name="Low" sql-type="double"/>
+    </property>
+    <property name="Volume">
+      <column name="Volume" sql-type="double"/>
+    </property>
+    <property name="Date">
+      <column name="Date" sql-type="varchar" not-null="true"/>
+    </property>
+    <many-to-one name="FEntity" class="FinancialThing.Models.FEntity, FinancialThing.Models">
+      <column name="FEntityId" sql-type="varchar"/>
+    </many-to-one>
+  </class>
+</hibernate-mapping>
