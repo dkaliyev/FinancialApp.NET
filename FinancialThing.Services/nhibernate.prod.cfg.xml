@@ -3,6 +3,7 @@
     <property name="connection.provider">NHibernate.Connection.DriverConnectionProvider</property>
     <property name="dialect">NHibernate.Dialect.MsSql2012Dialect</property>
     <property name="connection.driver_class">NHibernate.Driver.SqlClientDriver</property>
+    <property name="connection.connection_string">Server=SQL5003.Smarterasp.net;Database=DB_9F324B_FinThing;User ID=DB_9F324B_FinThing_admin;Password=20041908kjh;</property>
 
     <property name="show_sql">false</property>
   </session-factory>

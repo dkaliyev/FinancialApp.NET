@@ -1,0 +1,9 @@
+<publishData>
+  <publishProfile
+    publishUrl="https://sadbros-001-site1.ctempurl.com:8172/msdeploy.axd"
+    msdeploySite="sadbros-001-site1"
+    destinationAppUrl="http://sadbros-001-site1.ctempurl.com/"
+    profileName="Default Settings"
+    publishMethod="MSDeploy"
+    userName="ifc\sadbros-001" />
+</publishData>
