@@ -69,7 +69,14 @@ namespace FinancialThing.Services.Controllers
                     }
                     finally
                     {
-                        _ratioValueRepo.SaveOrUpdate(value);
+                        try
+                        {
+                            _ratioValueRepo.SaveOrUpdate(value);
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.Write(ex.Message);
+                        }
                     }
                 }
             }

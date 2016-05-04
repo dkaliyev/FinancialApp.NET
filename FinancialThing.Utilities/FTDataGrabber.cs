@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Net;
+using System.Security.AccessControl;
 using System.Text;
 
 namespace FinancialThing.Utilities
@@ -31,6 +32,15 @@ namespace FinancialThing.Utilities
             {
                 client.Headers[HttpRequestHeader.ContentType] = "application/json";
                 return Encoding.ASCII.GetString(client.UploadData(url, "POST", Encoding.ASCII.GetBytes(data??"")));
+            }
+        }
+
+        public string Delete(string url, string data)
+        {
+            using (var client = new System.Net.WebClient())
+            {
+                client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                return Encoding.ASCII.GetString(client.UploadData(url, "DELETE", Encoding.ASCII.GetBytes(data ?? "")));
             }
         }
     }

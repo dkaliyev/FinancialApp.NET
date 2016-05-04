@@ -53,6 +53,7 @@ namespace FinancialThing.Services
 
             //Parser and grabber
             builder.Register(x => new FTDataGrabber()).As<IDataGrabber>().InstancePerRequest();
+            builder.Register(x => new YahooCompanyParser()).As<ICompanyParser<YahooCompany>>().InstancePerDependency();
             builder.Register(x => new FTHAPParser(x.Resolve<IDataGrabber>(), x.Resolve<IDatabaseRepository<Dictionary, Guid>>()))
                 .As<IParser<Company, StockExchange>>()
                 .InstancePerRequest();

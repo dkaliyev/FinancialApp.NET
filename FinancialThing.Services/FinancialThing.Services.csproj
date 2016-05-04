@@ -182,6 +182,7 @@
     <Compile Include="Controllers\RatioController.cs" />
     <Compile Include="Controllers\SectorController.cs" />
     <Compile Include="Controllers\StockExchangeController.cs" />
+    <Compile Include="Controllers\YahooCompaniesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

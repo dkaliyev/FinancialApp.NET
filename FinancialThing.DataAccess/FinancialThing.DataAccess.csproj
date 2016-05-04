@@ -106,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="nhibernate.cfg.xml" />
+    <EmbeddedResource Include="nHibernate\Mappings\YahooCompany.hbm.xml" />
     <EmbeddedResource Include="nHibernate\Mappings\RatioValue.hbm.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

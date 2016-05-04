@@ -42,5 +42,12 @@ namespace FinancialThing.Services.Controllers
             _uow.Commit();
             return FTJsonSerializer.Serialize(ratio);
         }
+
+        [HttpDelete]
+        public void Delete(Ratio ratio)
+        {
+            _ratioRepository.Delete(ratio);
+            _uow.Commit();
+        }
     }
 }
