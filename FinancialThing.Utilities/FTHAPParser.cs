@@ -185,13 +185,24 @@ namespace FinancialThing.Utilities
                             var value = new Value();
                             value.Data = data;
                             value.Year = years[i].ToString();
-                            value.DataValue = _rgx.Replace(values[i], "");
+
+                            values[i] = _rgx.Replace(values[i], "");
+
+                            if (values[i] == "--")
+                            {
+                                values[i] = "0";
+                            }
+
+                            value.DataValue = Convert.ToDecimal(values[i]);
+
                             data.Values.Add(value);
                             if (data.Dictionary.Code == "TR")
                             {
                                 var totalRevenue = new TotalRevenue();
                                 totalRevenue.Financials = financials;
-                                totalRevenue.Value = Convert.ToSingle(value.DataValue);
+
+                                totalRevenue.Value = value.DataValue;
+                                 
                                 totalRevenue.Year = int.Parse(value.Year);
                                 financials.TotalRevenue.Add(totalRevenue);
                             }
@@ -199,7 +210,9 @@ namespace FinancialThing.Utilities
                             {
                                 var totalAsssets = new TotalAssets();
                                 totalAsssets.Financials = financials;
-                                totalAsssets.Value = Convert.ToSingle(value.DataValue);
+
+                                totalAsssets.Value = value.DataValue;
+                                
                                 totalAsssets.Year = int.Parse(value.Year);
                                 financials.TotalAssets.Add(totalAsssets);
                             }

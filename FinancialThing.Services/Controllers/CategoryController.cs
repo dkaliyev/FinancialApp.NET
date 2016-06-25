@@ -19,11 +19,25 @@ namespace FinancialThing.Services.Controllers
             _repo = repo;
         }
 
-        public HttpResponseMessage Get()
+        public Status Get()
         {
-            var dics = _repo.GetQuery();
+            try
+            {
+                var dics = _repo.GetQuery();
+                var data = FTJsonSerializer.Serialize(dics);
 
-            return FTJsonSerializer.Serialize(dics);
+                return new Status
+                {
+                    Data = data,
+                    StatusCode = "0"
+                };
+            }
+            
+            catch(Exception)
+            {
+                return new ErrorStatus();
+            }
+
         }
 
         public GroupCategory Get(Guid id)

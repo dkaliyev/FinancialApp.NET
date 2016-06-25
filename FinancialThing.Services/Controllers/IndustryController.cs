@@ -7,6 +7,7 @@ using System.Web.Http;
 using FinancialThing.DataAccess;
 using FinancialThing.DTO;
 using FinancialThing.Models;
+using FinancialThing.Utilities;
 
 namespace FinancialThing.Services.Controllers
 {
@@ -24,22 +25,56 @@ namespace FinancialThing.Services.Controllers
         }
 
 
-        public IEnumerable<Industry> Get()
+        public Status Get()
         {
-            return _indRepo.GetQuery();
+            try
+            {
+                var data = _indRepo.GetQuery();
+                return new Status
+                {
+                    Data = FTJsonSerializer.Serialize(data),
+                    StatusCode = "0"
+                };
+            }
+            catch
+            {
+                return new ErrorStatus();
+            }
         }
 
-        public Industry Get(Guid id)
+        public Status Get(Guid id)
         {
-            return _indRepo.GetById(id);
+            try
+            {
+                return new Status
+                {
+                    Data = FTJsonSerializer.Serialize(_indRepo.GetById(id)),
+                    StatusCode = "0"
+                };
+            }
+            catch (Exception)
+            {
+                return new ErrorStatus();
+            }
         }
 
-        public Industry Post(Industry industry)
+        public Status Post(Industry industry)
         {
-            var sector = _sectorRepo.GetById(industry.Sector.Id);
-            var result = _indRepo.Add(new Industry() {Code = industry.Code, DisplayName = industry.DisplayName, Sector = sector});
-            _uow.Commit();
-            return result;
+            try
+            {
+                var sector = _sectorRepo.GetById(industry.Sector.Id);
+                var result = _indRepo.Add(new Industry() { Code = industry.Code, DisplayName = industry.DisplayName, Sector = sector });
+                _uow.Commit();
+                return new Status
+                {
+                    Data = FTJsonSerializer.Serialize(result),
+                    StatusCode = "0"
+                };
+            }
+            catch (Exception)
+            {
+                return new ErrorStatus();
+            }
         }
     }
 }

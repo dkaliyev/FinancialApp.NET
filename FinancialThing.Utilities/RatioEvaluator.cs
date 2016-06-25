@@ -24,41 +24,48 @@ namespace FinancialThing.Utilities
         {
             //if (!_expressions.ContainsKey(ratio.Code))
             //{
-                var exp = new Expression(ratio.Formula);
-                exp.EvaluateParameter += delegate(string name, ParameterArgs args)
-                {
-                    var value = data.First(d => d.Dictionary.Code == name).Values.ToList();
-                    args.Result = value;
-                };
+            var exp = new Expression(ratio.Formula);
+            exp.EvaluateParameter += delegate (string name, ParameterArgs args)
+            {
+                var value = data.First(d => d.Dictionary.Code == name).Values.ToList();
+                args.Result = value;
+            };
 
-                exp.EvaluateFunction += delegate(string name, FunctionArgs args)
+            exp.EvaluateFunction += delegate (string name, FunctionArgs args)
+            {
+                if (name == "Get")
                 {
-                    if (name == "Get")
+                    var flag = (int)args.Parameters[1].Evaluate();
+                    if (flag == 0)
                     {
-                        var flag = (int)args.Parameters[1].Evaluate();
-                        if (flag == 0)
-                        {
-                            var vals = args.Parameters[0].Evaluate() as List<Value>;
-                            var val = vals.OrderBy(v => v.Year).Last().DataValue;
-                            if (val == "--")
-                            {
-                                throw new InvalidOperationException();
-                            }
-                            args.Result = Convert.ToSingle(val);
-                        }
-                        else
-                        {
-                            var vals = args.Parameters[0].Evaluate() as List<Value>;
-                            args.Result = Convert.ToSingle(vals.Average(v =>v.DataValue == "--" ? 0 : Convert.ToSingle(v.DataValue)));
-                        }
+                        var vals = args.Parameters[0].Evaluate() as List<Value>;
+                        var val = vals.OrderBy(v => v.Year).Last().DataValue;
+                            //if (val == "--")
+                            //{
+                            //    throw new InvalidOperationException();
+                            //}
+                            args.Result = val;
                     }
-                };
-                //_expressions.Add(ratio.Code, exp);
+                    else
+                    {
+                        var vals = args.Parameters[0].Evaluate() as List<Value>;
+                        args.Result = vals.Average(v => Convert.ToSingle(v.DataValue));
+                    }
+                }
+            };
+            //_expressions.Add(ratio.Code, exp);
             //}
-            
-            //var e = _expressions[ratio.Code];
 
+            //var e = _expressions[ratio.Code];
+            try
+            {
                 return Convert.ToSingle(exp.Evaluate());
+            }
+            catch (DivideByZeroException ex)
+            {
+                return 0F;
+            }
+
         }
     }
 }

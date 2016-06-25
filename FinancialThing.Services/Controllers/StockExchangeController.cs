@@ -4,6 +4,7 @@ using System.Web.Http;
 using FinancialThing.DataAccess;
 using FinancialThing.Models;
 using FinancialThing.Services.Utilities;
+using FinancialThing.Utilities;
 
 namespace FinancialThing.Services.Controllers
 {
@@ -17,11 +18,22 @@ namespace FinancialThing.Services.Controllers
             _uow = uow;
         }
         // GET api/values
-        public IEnumerable<StockExchange> Get()
+        public Status Get()
         {
-            var dics = _repo.GetQuery();
+            try
+            {
+                var dics = _repo.GetQuery();
 
-            return dics;
+                return new Status
+                {
+                    Data = FTJsonSerializer.Serialize(dics),
+                    StatusCode = "0"
+                };
+            }
+            catch (Exception)
+            {
+                return new ErrorStatus();
+            }
         }
 
         // GET api/values/5
@@ -32,12 +44,25 @@ namespace FinancialThing.Services.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post(StockExchange exchange)
+        public Status Post(StockExchange exchange)
         {
-            if (exchange != null)
+            try
             {
-                _repo.Add(exchange);
-                _uow.Commit();
+                if (exchange != null)
+                {
+                    _repo.Add(exchange);
+                    _uow.Commit();
+                    return new Status
+                    {
+                        Data = "Stock exchange is created",
+                        StatusCode = "0"
+                    };
+                }
+                return new ErrorStatus();
+            }
+            catch(Exception)
+            {
+                return new ErrorStatus();
             }
         }
 

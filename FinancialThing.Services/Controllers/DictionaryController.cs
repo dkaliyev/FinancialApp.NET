@@ -16,6 +16,7 @@ using NHibernate.Dialect;
 using NHibernate.Dialect.Function;
 using NHibernate.Driver;
 using NHibernate.Linq;
+using FinancialThing.Utilities;
 
 namespace FinancialThing.Services.Controllers
 {
@@ -29,11 +30,22 @@ namespace FinancialThing.Services.Controllers
             _uow = uow;
         }
         // GET api/values
-        public IEnumerable<Dictionary> Get()
+        public Status Get()
         {
-            var dics = _repo.GetQuery();
+            try
+            {
+                var dics = _repo.GetQuery();
 
-            return dics;
+                return new Status
+                {
+                    Data = FTJsonSerializer.Serialize(dics),
+                    StatusCode = "0"
+                };
+            }
+            catch (Exception)
+            {
+                return new ErrorStatus();
+            }
         }
 
         // GET api/values/5
@@ -44,10 +56,23 @@ namespace FinancialThing.Services.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post()
+        public Status Post()
         {
-            DictionaryHelper.InsertDicionaries(_repo);
-            _uow.Commit();
+            try
+            {
+                DictionaryHelper.InsertDicionaries(_repo);
+                _uow.Commit();
+                return new Status
+                {
+                    Data = "Dictionary is created",
+                    StatusCode = "0"
+                };
+            }
+            catch(Exception)
+            {
+                return new ErrorStatus();
+            }
+            
         }
 
         // PUT api/values/5

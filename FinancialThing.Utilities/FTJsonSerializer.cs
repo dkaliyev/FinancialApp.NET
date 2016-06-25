@@ -12,23 +12,20 @@ namespace FinancialThing.Utilities
 {
     public class FTJsonSerializer
     {
-        public static HttpResponseMessage Serialize(object obj)
+        public static string Serialize(object obj)
         {
             if (obj == null)
-                return new HttpResponseMessage();
+                return string.Empty;
             var serializer = new JsonSerializer
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 ContractResolver = new NHibernateContractResolver()
             };
             StringWriter stringWriter = new StringWriter();
-            JsonWriter jsonWriter = new Newtonsoft.Json.JsonTextWriter(stringWriter);
+            JsonWriter jsonWriter = new JsonTextWriter(stringWriter);
             serializer.Serialize(jsonWriter, obj);
             string serializedObject = stringWriter.ToString();
-            return new HttpResponseMessage()
-            {
-                Content = new StringContent(serializedObject, System.Text.Encoding.UTF8, "text/html")
-            };
+            return serializedObject;
         }
     }
 }

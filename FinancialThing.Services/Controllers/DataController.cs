@@ -10,14 +10,14 @@ using FinancialThing.Utilities;
 
 namespace FinancialThing.Services.Controllers
 {
-    public class DataController: ApiController
+    public class DataController : ApiController
     {
         private IDatabaseRepository<Company, Guid> _companyRepository;
         private IParser<Company, StockExchange> _parser;
         private IDataMerger<Company> _dataMerger;
         private IUnitOfWork _uow;
 
-        public DataController(IDatabaseRepository<Company, Guid> companyRepository, 
+        public DataController(IDatabaseRepository<Company, Guid> companyRepository,
             IParser<Company, StockExchange> parser, IUnitOfWork uow, IDataMerger<Company> dataMerger)
         {
             _companyRepository = companyRepository;
@@ -26,50 +26,99 @@ namespace FinancialThing.Services.Controllers
             _dataMerger = dataMerger;
         }
 
-        public HttpResponseMessage Get()
+        public Status Get()
         {
             var companies = _companyRepository.GetQuery();
-
-            return FTJsonSerializer.Serialize(companies);
+            var serializedObject = FTJsonSerializer.Serialize(companies);
+            return new Status
+            {
+                StatusCode = "0",
+                Data = serializedObject
+            };
         }
 
-        public HttpResponseMessage Get(Guid id)
+        public Status Get(Guid id)
         {
             var companies = _companyRepository.GetById(id);
 
-            return FTJsonSerializer.Serialize(companies);
+            var serializedObject = FTJsonSerializer.Serialize(companies);
+            return new Status
+            {
+                StatusCode = "0",
+                Data = serializedObject
+            };
         }
 
-        public HttpResponseMessage PutAll()
+        public Status PutAll()
         {
             var companies = _companyRepository.GetQuery();
-            foreach (var oldCompany in companies)
+            try
             {
+                foreach (var oldCompany in companies)
+                {
+                    if (oldCompany != null)
+                    {
+                        var newCompany = _parser.Parse(oldCompany.StockName, oldCompany.StockExchange);
+                        _dataMerger.Merge(oldCompany, newCompany);
+                        _companyRepository.Update(oldCompany);
+                    }
+                }
+                _uow.Commit();
+                return new Status
+                {
+                    StatusCode = "0",
+                    Data = "Data generated successfully for all companies"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Status
+                {
+                    StatusCode = "1",
+                    Data = "There were issues generating the data, please try again later"
+                };
+            }
+
+        }
+
+        public Status Put(Guid id)
+        {
+            var oldCompany = _companyRepository.GetById(id);
+            try
+            { 
                 if (oldCompany != null)
                 {
                     var newCompany = _parser.Parse(oldCompany.StockName, oldCompany.StockExchange);
+                    if (newCompany == null)
+                        return new Status
+                        {
+                            StatusCode = "1",
+                            Data = "Could not parse data, please try again later"
+                        };
                     _dataMerger.Merge(oldCompany, newCompany);
                     _companyRepository.Update(oldCompany);
+                    _uow.Commit();
+                    return new Status
+                    {
+                        StatusCode = "0",
+                        Data = "Data has been generated successfully"
+                    };
                 }
+                return new Status
+                {
+                    StatusCode = "1",
+                    Data = "Company does not exist"
+                };
             }
-            _uow.Commit();
-            return new HttpResponseMessage();
-        }
 
-        public HttpResponseMessage Put(Guid id)
-        {
-            var oldCompany = _companyRepository.GetById(id);
-            if (oldCompany != null)
+            catch(Exception ex)
             {
-                var newCompany = _parser.Parse(oldCompany.StockName, oldCompany.StockExchange);
-                if(newCompany==null)
-                    return new HttpResponseMessage();
-                _dataMerger.Merge(oldCompany, newCompany);
-                _companyRepository.Update(oldCompany);
-                _uow.Commit();
-                return new HttpResponseMessage();
+                return new Status
+                {
+                    StatusCode = "1",
+                    Data = "There was an issue generating the data"
+                };
             }
-            return new HttpResponseMessage();
         }
     }
 }

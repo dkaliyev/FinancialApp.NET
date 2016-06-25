@@ -17,8 +17,8 @@ namespace FinancialThing.Services.Controllers
         private IUnitOfWork _uow;
         private IDataGrabber _grabber;
         private ICompanyParser<YahooCompany> _parser;
-        
-        
+
+
 
         public YahooCompaniesController(IDatabaseRepository<YahooCompany, Guid> companyRepository, IUnitOfWork uow, ICompanyParser<YahooCompany> parser, IDataGrabber grabber)
         {
@@ -29,33 +29,55 @@ namespace FinancialThing.Services.Controllers
         }
 
         [System.Web.Http.HttpGet]
-        public HttpResponseMessage Get()
+        public Status Get()
         {
-            var companies = _companyRepository.GetQuery().ToList();
-            return FTJsonSerializer.Serialize(companies);
+            try
+            {
+                var companies = _companyRepository.GetQuery().ToList();
+                return new Status
+                {
+                    Data = FTJsonSerializer.Serialize(companies),
+                    StatusCode = "0"
+                };
+            }
+            catch (Exception)
+            {
+                return new ErrorStatus();
+            }
         }
 
         [System.Web.Http.HttpPost]
-        public HttpResponseMessage Post()
+        public Status Post()
         {
-            List<int> indexes = new List<int>() { 0, 1, 2 };
-            string link = "https://uk.finance.yahoo.com/q/cp?s={0}&c={1}";
-            var list = "^FTSE";
-            foreach (var ind in indexes)
+            try
             {
-                var l = string.Format(link, list, ind);
-                var data = _grabber.Grab(l);
-                var res = _parser.Parse(data);
-                foreach (var yahooCompany in res)
+                List<int> indexes = new List<int>() { 0, 1, 2 };
+                string link = "https://uk.finance.yahoo.com/q/cp?s={0}&c={1}";
+                var list = "^FTSE";
+                foreach (var ind in indexes)
                 {
-                    if (_companyRepository.GetQuery().FirstOrDefault(c => c.Symbol == yahooCompany.Symbol) == null)
+                    var l = string.Format(link, list, ind);
+                    var data = _grabber.Grab(l);
+                    var res = _parser.Parse(data);
+                    foreach (var yahooCompany in res)
                     {
-                        _companyRepository.SaveOrUpdate(yahooCompany);
+                        if (_companyRepository.GetQuery().FirstOrDefault(c => c.Symbol == yahooCompany.Symbol) == null)
+                        {
+                            _companyRepository.SaveOrUpdate(yahooCompany);
+                        }
                     }
                 }
+                _uow.Commit();
+                return new Status
+                {
+                    Data = FTJsonSerializer.Serialize(new { status = "success" }),
+                    StatusCode = "0"
+                };
             }
-            _uow.Commit();
-            return FTJsonSerializer.Serialize(new {status = "success"});
+            catch(Exception)
+            {
+                return new ErrorStatus();
+            }
         }
     }
 }

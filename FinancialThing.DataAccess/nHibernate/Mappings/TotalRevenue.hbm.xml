@@ -8,7 +8,7 @@
       <column name="FinancialId" sql-type="varchar"/>
     </many-to-one>
     <property name="Value">
-      <column name="value" sql-type="varchar"/>
+      <column name="value"/>
     </property>
     <property name="Year">
       <column name="year" sql-type="varchar"/>

@@ -31,13 +31,30 @@ namespace FinancialThing.Services.Controllers
         }
 
 
-        public HttpResponseMessage Get()
+        public Status Get()
         {
-            var ratios = _ratioValueRepo.GetQuery();
-            return FTJsonSerializer.Serialize(ratios);
+            try
+            {
+                var ratios = _ratioValueRepo.GetQuery();
+                var data = FTJsonSerializer.Serialize(ratios);
+                return new Status
+                {
+                    StatusCode = "0",
+                    Data = data
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Status
+                {
+                    StatusCode = "1",
+                    Data = "There was an error"
+                };
+            }
+             
         }
 
-        public HttpResponseMessage Post()
+        public Status Post()
         {
             var companies = _companyServiceRepository.GetQuery();
             var ratios = _ratioServiceRepository.GetQuery();
@@ -80,9 +97,24 @@ namespace FinancialThing.Services.Controllers
                     }
                 }
             }
-
-            _uow.Commit();
-            return FTJsonSerializer.Serialize(new {Status =  "Success"});
+            try
+            {
+                _uow.Commit();
+                return new Status
+                {
+                    Data = "Successfully saved new ratio values",
+                    StatusCode = "0"
+                };
+            }
+            catch(Exception)
+            {
+                return new Status
+                {
+                    Data = "Unable to save new ratio values",
+                    StatusCode = "1"
+                };
+            }
+            
         }
     }
 }

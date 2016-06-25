@@ -27,57 +27,115 @@ namespace FinancialThing.Services.Controllers
             _parser = parser;
             _uow = uow;
         }
-        public HttpResponseMessage GetAll()
+        public Status GetAll()
         {
-            var companies = _companyRepository.GetQuery().Select(x => new Company() { Id = x.Id, FullName = x.FullName, StockName = x.StockName, StockExchange = x.StockExchange, Industry = x.Industry, Sector = x.Sector});
+            try
+            {
+                var companies = _companyRepository.GetQuery().Select(x => new Company() { Id = x.Id, FullName = x.FullName, StockName = x.StockName, StockExchange = x.StockExchange, Industry = x.Industry, Sector = x.Sector });
 
-            return FTJsonSerializer.Serialize(companies);
+                return new Status
+                {
+                    Data = FTJsonSerializer.Serialize(companies),
+                    StatusCode = "0"
+                };
+
+            }
+            catch (Exception)
+            {
+                return new ErrorStatus();
+            }
         }
 
-        public HttpResponseMessage Get(Guid id)
+        public Status Get(Guid id)
         {
-            var company = _companyRepository.GetQuery().Where(c => c.Id == id).Select(x => new Company() { Id = x.Id, FullName = x.FullName, StockName = x.StockName, StockExchange = x.StockExchange, Industry = x.Industry, Sector = x.Sector });
-            return FTJsonSerializer.Serialize(company);
+            try
+            {
+                var company = _companyRepository.GetQuery().Where(c => c.Id == id).Select(x => new Company() { Id = x.Id, FullName = x.FullName, StockName = x.StockName, StockExchange = x.StockExchange, Industry = x.Industry, Sector = x.Sector });
+                return new Status
+                {
+                    Data = FTJsonSerializer.Serialize(company),
+                    StatusCode = "0"
+                };
+            }
+            catch (Exception)
+            {
+                return new ErrorStatus();
+            }
         }
 
         [HttpPost]
-        public HttpResponseMessage Post(Company newCompany)
+        public Status Post(Company newCompany)
         {
-            var company = _companyRepository.FindBy(c => c.StockName == newCompany.StockName);
-            if (company != null)
+            try
             {
-                return FTJsonSerializer.Serialize(new CompanyDetails() { Code = "None" });
-            }
-            
+                var company = _companyRepository.FindBy(c => c.StockName == newCompany.StockName);
+                if (company != null)
+                {
+                    return new Status
+                    {
+                        Data = "Company already exists",
+                        StatusCode = "1"
+                    };
+                }
 
-            var compFullName = _parser.GetCompanyName(newCompany.StockName, newCompany.StockExchange);
-            if (compFullName != null)
-            {
-                newCompany.FullName = compFullName;
-                newCompany.DateAdded = DateTime.Today;
-                var id = _companyRepository.Add(newCompany);
-                _uow.Commit();
-                //newCompany.FullName = compFullName;
-                newCompany.Id = id.Id;
-                return FTJsonSerializer.Serialize(newCompany);
+
+                var compFullName = _parser.GetCompanyName(newCompany.StockName, newCompany.StockExchange);
+                if (compFullName != null)
+                {
+                    newCompany.FullName = compFullName;
+                    newCompany.DateAdded = DateTime.Today;
+                    var id = _companyRepository.Add(newCompany);
+                    _uow.Commit();
+                    //newCompany.FullName = compFullName;
+                    newCompany.Id = id.Id;
+                    return new Status
+                    {
+                        Data = FTJsonSerializer.Serialize(newCompany),
+                        StatusCode = "0"
+                    };
+                }
+                else
+                {
+                    return new ErrorStatus();
+                }
             }
-            return FTJsonSerializer.Serialize(new CompanyDetails() { Code = "None" });
+            catch (Exception)
+            {
+                return new ErrorStatus();
+            }
+
         }
 
 
-        public HttpResponseMessage Delete(Guid id)
+        public Status Delete(Guid id)
         {
             var company = _companyRepository.GetById(id);
-            if (company != null)
+            try
             {
-                _companyRepository.Delete(company);
-                _uow.Commit();
-                return FTJsonSerializer.Serialize(new { Status="success" }); 
+                if (company != null)
+                {
+                    _companyRepository.Delete(company);
+                    _uow.Commit();
+                    return new Status
+                    {
+                        Data = "Company is deleted successfully",
+                        StatusCode = "0"
+                    };
+                }
+                else
+                {
+                    return new Status
+                    {
+                        Data = "Company not found",
+                        StatusCode = "1"
+                    };
+                }
             }
-            else
+            catch(Exception)
             {
-                return FTJsonSerializer.Serialize(new { Status = "Company not found" });
+                return new ErrorStatus();
             }
+
         }
     }
 }

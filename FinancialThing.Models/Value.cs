@@ -9,7 +9,7 @@ namespace FinancialThing.Models
     public class Value: Entity
     {
         public virtual Data Data { get; set; }
-        public virtual string DataValue { get; set; }
+        public virtual decimal DataValue { get; set; }
         public virtual string Year { get; set; }
     }
 }

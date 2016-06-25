@@ -42,6 +42,7 @@
     <Compile Include="Assets.cs" />
     <Compile Include="BalanceSheet.cs" />
     <Compile Include="CashFlow.cs" />
+    <Compile Include="ErrorStatus.cs" />
     <Compile Include="GroupCategory.cs" />
     <Compile Include="CategoryEntry.cs" />
     <Compile Include="CommonStockDividends.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Sector.cs" />
     <Compile Include="ShareholdersEquity.cs" />
     <Compile Include="StatementClass.cs" />
+    <Compile Include="Status.cs" />
     <Compile Include="StockExchange.cs" />
     <Compile Include="SubstractOperation.cs" />
     <Compile Include="SumOperation.cs" />

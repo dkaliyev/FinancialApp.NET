@@ -23,31 +23,84 @@ namespace FinancialThing.Services.Controllers
             _uow = uow;
         }
 
-        public HttpResponseMessage Get(Guid id)
+        public Status Get(Guid id)
         {
-            var result = _ratioRepository.GetQuery().Where(r => r.Id == id);
-            return FTJsonSerializer.Serialize(result);
+            try
+            {
+                var result = _ratioRepository.GetQuery().Where(r => r.Id == id);
+                var data = FTJsonSerializer.Serialize(result);
+                return new Status
+                {
+                    Data = data,
+                    StatusCode = "0"
+                };
+            }
+            catch(Exception)
+            {
+                return new Status
+                {
+                    Data = "There was an error",
+                    StatusCode = "1"
+                };
+            }
         }
 
-        public HttpResponseMessage GetAll()
+        public Status GetAll()
         {
-            var result = _ratioRepository.GetQuery().ToList();
-            return FTJsonSerializer.Serialize(result);
+            try
+            {
+                var result = _ratioRepository.GetQuery().ToList();
+                var data = FTJsonSerializer.Serialize(result);
+                return new Status
+                {
+                    Data = data,
+                    StatusCode = "0"
+                };
+            }
+            catch(Exception)
+            {
+                return new ErrorStatus();
+            }
         }
 
         [HttpPost]
-        public HttpResponseMessage Post(Ratio ratio)
-        {
-            _ratioRepository.Add(ratio);
-            _uow.Commit();
-            return FTJsonSerializer.Serialize(ratio);
+        public Status Post(Ratio ratio)
+        { 
+            try
+            {
+                _ratioRepository.Add(ratio);
+                _uow.Commit();
+                var data = FTJsonSerializer.Serialize(ratio);
+                return new Status
+                {
+                    Data = data,
+                    StatusCode = "0"
+                };
+            }
+            catch(Exception)
+            {
+                return new ErrorStatus();
+            }
         }
 
         [HttpDelete]
-        public void Delete(Ratio ratio)
+        public Status Delete(Ratio ratio)
         {
-            _ratioRepository.Delete(ratio);
-            _uow.Commit();
+            try
+            {
+                _ratioRepository.Delete(ratio);
+                _uow.Commit();
+                return new Status
+                {
+                    Data = "Ratio is deleted successfully",
+                    StatusCode = "0"
+                };
+            }
+            catch(Exception)
+            {
+                return new ErrorStatus();
+            }
+            
         }
     }
 }
