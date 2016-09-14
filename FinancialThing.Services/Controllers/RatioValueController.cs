@@ -43,7 +43,7 @@ namespace FinancialThing.Services.Controllers
                     Data = data
                 };
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new Status
                 {

@@ -6,6 +6,7 @@ using FinancialThing.Configuration;
 using FinancialThing.DataAccess;
 using FinancialThing.Models;
 using HtmlAgilityPack;
+using System.Threading.Tasks;
 
 namespace FinancialThing.Utilities
 {
@@ -28,28 +29,34 @@ namespace FinancialThing.Utilities
             _grabber = grabber;
             _dictionaries = dicRepository.GetQuery();
             
-            Url = "http://markets.ft.com/research/Markets/Tearsheets/Financials?s={0}:{1}&subview={2}";
-            CompanyName = "http://markets.ft.com/research/Markets/Tearsheets/Financials?s={0}:{1}";
+            Url = "http://markets.ft.com/data/equities/tearsheet/financials?s={0}:{1}&subview={2}";
+            CompanyName = "http://markets.ft.com/data/equities/tearsheets/financials?s={0}:{1}";
         }
 
         private string GetCompanyName(HtmlDocument doc)
         {
-            var name = doc.DocumentNode.SelectSingleNode("//h1[@class='contains']")
-                    .SelectSingleNode("//span[@class='formatIssueName']")
-                    .InnerText;
+            var name = doc.DocumentNode.SelectSingleNode("//h1[@class='mod-tearsheet-overview__header__name mod-tearsheet-overview__header__name--large']").InnerText;
             return name;
         }
 
-        private List<int> GetYears(HtmlDocument doc)
+        public async Task<List<int>> GetYears(string url)
+        {
+            var data = await _grabber.Get(url);
+            var html = new HtmlDocument();
+            html.LoadHtml(data);
+            return GetYears(html);
+        }
+
+        public List<int> GetYears(HtmlDocument doc)
         {
             var yearNodes =
                doc.DocumentNode;
             var head = yearNodes.SelectSingleNode("//thead");
             var tr = head.ChildNodes.FirstOrDefault(c => c.Name == "tr");
-            var tds = tr.ChildNodes
-                   .Where(d => !d.Attributes.Contains("class"));
+            var ths = tr.ChildNodes.Where(t => t.Name == "th" && ((t.Attributes["class"]!=null && t.Attributes["class"].Value!="mod-ui-table__header--text")||t.Attributes["class"] == null));
+            
             List<int> years = new List<int>();
-            foreach (var node in tds)
+            foreach (var node in ths)
             {
                 years.Add(int.Parse(node.InnerText));
             }
@@ -105,16 +112,16 @@ namespace FinancialThing.Utilities
             return null;
         }
 
-        public string GetCompanyName(string name, StockExchange exch)
+        public async Task<string> GetCompanyName(string name, StockExchange exch)
         {
-            var companyNameHtml = _grabber.Grab(string.Format(CompanyName, name, exch.Marker));
+            var companyNameHtml = await _grabber.Get(string.Format(CompanyName, name, exch.Marker));
             var nameHtmlDoc = new HtmlDocument();
             nameHtmlDoc.LoadHtml(companyNameHtml);
             var compName = GetCompanyName(nameHtmlDoc);
             return compName;
         }
 
-        public Company Parse(string name, StockExchange exchange)
+        public async Task<Company> Parse(string name, StockExchange exchange)
         {
             var pages = DataMappingConfiguration.Instance.Pages;
 
@@ -130,13 +137,14 @@ namespace FinancialThing.Utilities
 
             financials.Company = company;
 
-            var companyNameHtml = _grabber.Grab(string.Format(CompanyName, name, exchange.Marker));
+            var companyNameHtml = await _grabber.Get(string.Format(CompanyName, name, exchange.Marker));
             var nameHtmlDoc = new HtmlDocument();
             nameHtmlDoc.LoadHtml(companyNameHtml);
             var compName = GetCompanyName(nameHtmlDoc);
             company.FullName = compName;
             company.Financials = financials;
             company.DateAdded = DateTime.Now;
+
             company.StockName = name;
             company.StockExchange = exchange;
 
@@ -145,7 +153,7 @@ namespace FinancialThing.Utilities
                 var pageObj = new Page();
                 pageObj.Financials = financials;
                 pageObj.Dictionary = _dictionaries.FirstOrDefault(d => d.Code == page.Code);
-                var bsHtml = _grabber.Grab(string.Format(Url, name, exchange.Marker, page.Name));
+                var bsHtml = await _grabber.Get(string.Format(Url, name, exchange.Marker, page.Name));
                 var bsHtmlDoc = new HtmlDocument();
                 bsHtmlDoc.LoadHtml(bsHtml);
                 var mainBody = bsHtmlDoc.DocumentNode.Descendants("body").FirstOrDefault();

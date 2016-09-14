@@ -57,8 +57,8 @@ namespace FinancialThing.Services.Controllers
                 foreach (var ind in indexes)
                 {
                     var l = string.Format(link, list, ind);
-                    var data = _grabber.Grab(l);
-                    var res = _parser.Parse(data);
+                    var data = _grabber.Get(l);
+                    var res = _parser.Parse(data.Result);
                     foreach (var yahooCompany in res)
                     {
                         if (_companyRepository.GetQuery().FirstOrDefault(c => c.Symbol == yahooCompany.Symbol) == null)

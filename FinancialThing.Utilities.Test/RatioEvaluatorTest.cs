@@ -31,12 +31,12 @@ namespace FinancialThing.Utilities.Test
                         new Value()
                         {
                             Year = "2015",
-                            DataValue = "10.2"
+                            DataValue = 10.2M
                         },
                         new Value()
                         {
                             Year = "2014",
-                            DataValue = "9"
+                            DataValue = 9
                         }
                     }
                 },
@@ -51,12 +51,12 @@ namespace FinancialThing.Utilities.Test
                         new Value()
                         {
                             Year = "2015",
-                            DataValue = "14.8"
+                            DataValue = 14.8M
                         },
                         new Value()
                         {
                             Year = "2014",
-                            DataValue = "15"
+                            DataValue = 15
                         }
                     }
                 },
@@ -71,12 +71,12 @@ namespace FinancialThing.Utilities.Test
                         new Value()
                         {
                             Year = "2015",
-                            DataValue = "2"
+                            DataValue = 2
                         },
                         new Value()
                         {
                             Year = "2014",
-                            DataValue = "5"
+                            DataValue = 5
                         }
                     }
                 }

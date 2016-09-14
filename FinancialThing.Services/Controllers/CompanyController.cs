@@ -11,6 +11,7 @@ using FinancialThing.Utilities;
 using Newtonsoft.Json;
 using NHibernate.Exceptions;
 using NHibernate.Linq.Functions;
+using System.Threading.Tasks;
 
 namespace FinancialThing.Services.Controllers
 {
@@ -64,7 +65,7 @@ namespace FinancialThing.Services.Controllers
         }
 
         [HttpPost]
-        public Status Post(Company newCompany)
+        public async Task<Status> Post(Company newCompany)
         {
             try
             {
@@ -79,7 +80,7 @@ namespace FinancialThing.Services.Controllers
                 }
 
 
-                var compFullName = _parser.GetCompanyName(newCompany.StockName, newCompany.StockExchange);
+                var compFullName = await _parser.GetCompanyName(newCompany.StockName, newCompany.StockExchange);
                 if (compFullName != null)
                 {
                     newCompany.FullName = compFullName;

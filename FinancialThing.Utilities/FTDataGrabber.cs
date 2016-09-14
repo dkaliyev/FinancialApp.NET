@@ -5,9 +5,9 @@ using System.Text;
 
 namespace FinancialThing.Utilities
 {
-    public class FTDataGrabber: IDataGrabber
+    public class FTDataGrabber
     {
-        public string Grab(string url)
+        public string Get(string url)
         {
             string htmlCode;
             using (WebClient client = new WebClient())

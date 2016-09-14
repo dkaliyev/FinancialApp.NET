@@ -25,6 +25,13 @@ namespace FinancialThing.Configuration
             set { this["displayName"] = value; }
         }
 
+        [ConfigurationProperty("ftName")]
+        public string FtName
+        {
+            get { return (string)this["ftName"]; }
+            set { this["ftName"] = value; }
+        }
+
         [ConfigurationProperty("order")]
         public string Order
         {

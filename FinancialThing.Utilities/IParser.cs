@@ -1,4 +1,5 @@
 ﻿using FinancialThing.Models;
+using System.Threading.Tasks;
 
 namespace FinancialThing.Utilities
 {
@@ -6,7 +7,7 @@ namespace FinancialThing.Utilities
         where T: class, IEntity
         where E: class, IEntity
     {
-        T Parse(string name, E exchange);
-        string GetCompanyName(string name, E exchange);
+        Task<T> Parse(string name, E exchange);
+        Task<string> GetCompanyName(string name, E exchange);
     }
 }

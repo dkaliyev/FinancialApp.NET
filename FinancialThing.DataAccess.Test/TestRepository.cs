@@ -48,19 +48,19 @@ namespace FinancialThing.DataAccess.Test
             {
                 new Value()
                 {
-                    DataValue = "123",
+                    DataValue = 123,
                     Year = "2014",
                     Data = datum
                 },
                 new Value()
                 {
-                    DataValue = "124",
+                    DataValue = 124,
                     Year = "2013",
                     Data = datum
                 },
                 new Value()
                 {
-                    DataValue = "125",
+                    DataValue = 125,
                     Year = "2012",
                     Data = datum
                 }

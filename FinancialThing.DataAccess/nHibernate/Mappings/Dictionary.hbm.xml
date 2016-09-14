@@ -16,5 +16,8 @@
     <property name="Order">
       <column name="OrderN" sql-type="varchar" not-null="true" />
     </property>
+    <property name="SiteName">
+      <column name="SiteName" sql-type="varchar" not-null="true" />
+    </property>
   </class>
 </hibernate-mapping>

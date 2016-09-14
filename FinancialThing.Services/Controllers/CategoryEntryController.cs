@@ -10,7 +10,6 @@ namespace FinancialThing.Services.Controllers
     public class CategoryEntryController : ApiController
     {
         private readonly IDatabaseRepository<CategoryEntry, Guid> _repo;
-        private IUnitOfWork _uow;
         public CategoryEntryController(IDatabaseRepository<CategoryEntry, Guid> repo)
         {
             _repo = repo;

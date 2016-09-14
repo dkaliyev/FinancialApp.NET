@@ -1,13 +1,15 @@
-﻿namespace FinancialThing.Utilities
+﻿using System.Threading.Tasks;
+
+namespace FinancialThing.Utilities
 {
     public interface IDataGrabber
     {
-        string Grab(string url);
+        Task<string> Get(string url);
 
-        void Put(string url, string data);
+        Task<string> Put(string url, string data);
 
-        string Post(string url, string data);
+        Task<string> Post(string url, string data);
 
-        string Delete(string url, string data);
+        Task<string> Delete(string url, string data);
     }
 }

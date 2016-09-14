@@ -61,7 +61,7 @@ namespace FinancialThing.Utilities
             {
                 return Convert.ToSingle(exp.Evaluate());
             }
-            catch (DivideByZeroException ex)
+            catch (DivideByZeroException)
             {
                 return 0F;
             }

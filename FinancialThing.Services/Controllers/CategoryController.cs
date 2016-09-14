@@ -13,7 +13,6 @@ namespace FinancialThing.Services.Controllers
     public class CategoryController: ApiController
     {
         private readonly IDatabaseRepository<GroupCategory, Guid> _repo;
-        private IUnitOfWork _uow;
         public CategoryController(IDatabaseRepository<GroupCategory, Guid> repo)
         {
             _repo = repo;

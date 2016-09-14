@@ -7,6 +7,7 @@ using System.Web.Http;
 using FinancialThing.DataAccess;
 using FinancialThing.Models;
 using FinancialThing.Utilities;
+using System.Threading.Tasks;
 
 namespace FinancialThing.Services.Controllers
 {
@@ -49,7 +50,7 @@ namespace FinancialThing.Services.Controllers
             };
         }
 
-        public Status PutAll()
+        public async Task<Status> PutAll()
         {
             var companies = _companyRepository.GetQuery();
             try
@@ -58,7 +59,7 @@ namespace FinancialThing.Services.Controllers
                 {
                     if (oldCompany != null)
                     {
-                        var newCompany = _parser.Parse(oldCompany.StockName, oldCompany.StockExchange);
+                        var newCompany = await _parser.Parse(oldCompany.StockName, oldCompany.StockExchange);
                         _dataMerger.Merge(oldCompany, newCompany);
                         _companyRepository.Update(oldCompany);
                     }
@@ -70,7 +71,7 @@ namespace FinancialThing.Services.Controllers
                     Data = "Data generated successfully for all companies"
                 };
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new Status
                 {
@@ -81,14 +82,14 @@ namespace FinancialThing.Services.Controllers
 
         }
 
-        public Status Put(Guid id)
+        public async Task<Status> Put(Guid id)
         {
             var oldCompany = _companyRepository.GetById(id);
             try
             { 
                 if (oldCompany != null)
                 {
-                    var newCompany = _parser.Parse(oldCompany.StockName, oldCompany.StockExchange);
+                    var newCompany = await _parser.Parse(oldCompany.StockName, oldCompany.StockExchange);
                     if (newCompany == null)
                         return new Status
                         {
@@ -111,7 +112,7 @@ namespace FinancialThing.Services.Controllers
                 };
             }
 
-            catch(Exception ex)
+            catch(Exception)
             {
                 return new Status
                 {

@@ -35,7 +35,12 @@
     <Reference Include="FinancialThing.Models">
       <HintPath>..\FinancialThing.Models\bin\Debug\FinancialThing.Models.dll</HintPath>
     </Reference>
+    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\FinancialThing.Services\bin\NHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -51,6 +56,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FinancialThing.Configuration\FinancialThing.Configuration.csproj">
+      <Project>{8e3bf183-d732-451c-a349-d95bc6c98272}</Project>
+      <Name>FinancialThing.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FinancialThing.DataAccess\FinancialThing.DataAccess.csproj">
+      <Project>{fd8387d7-7d1b-423e-b294-ee216983053e}</Project>
+      <Name>FinancialThing.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FinancialThing.Utilities\FinancialThing.Utilities.csproj">
       <Project>{2750E3AB-8A17-4A60-8891-984EBB7E43E5}</Project>
       <Name>FinancialThing.Utilities</Name>
