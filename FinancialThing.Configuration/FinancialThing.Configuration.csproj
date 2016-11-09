@@ -40,7 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="DataMappingConfiguration.cs" />
     <Compile Include="DataMappingConfigurationCollection.cs" />
     <Compile Include="DataMappingConfigurationEntry.cs" />

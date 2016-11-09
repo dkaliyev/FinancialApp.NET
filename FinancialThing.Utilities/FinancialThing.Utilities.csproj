@@ -40,9 +40,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\FinancialThing.Services\bin\NHibernate.dll</HintPath>
+    <Reference Include="NHibernate">
+      <HintPath>..\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -72,21 +71,21 @@
     <Compile Include="YahooCompanyParser.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\FinancialThing.Configuration\FinancialThing.Configuration.csproj">
-      <Project>{8E3BF183-D732-451C-A349-D95BC6C98272}</Project>
+      <Project>{8e3bf183-d732-451c-a349-d95bc6c98272}</Project>
       <Name>FinancialThing.Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="..\FinancialThing.DataAccess\FinancialThing.DataAccess.csproj">
-      <Project>{FD8387D7-7D1B-423E-B294-EE216983053E}</Project>
+      <Project>{fd8387d7-7d1b-423e-b294-ee216983053e}</Project>
       <Name>FinancialThing.DataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\FinancialThing.Models\FinancialThing.Models.csproj">
-      <Project>{E95CED99-558E-4397-BC9D-606307FDA4EA}</Project>
+      <Project>{e95ced99-558e-4397-bc9d-606307fda4ea}</Project>
       <Name>FinancialThing.Models</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

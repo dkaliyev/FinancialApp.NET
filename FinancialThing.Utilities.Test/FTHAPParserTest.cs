@@ -93,13 +93,35 @@ namespace FinancialThing.Utilities.Test
         }
 
         [TestMethod]
-        [Ignore]
+        public void TestGetRows()
+        {
+            var parser = new NewFTHAPParser(mockGrabber.Object, dicRepository);
+            var items = parser.GetRows("http://markets.ft.com/data/equities/tearsheets/financials?s=FB:NSQ&subview=IncomeStatement");
+        }
+
+        [TestMethod]
+        public void TestGetItems()
+        {
+            var parser = new NewFTHAPParser(mockGrabber.Object, dicRepository);
+            var rows = parser.GetRows("http://markets.ft.com/data/equities/tearsheets/financials?s=FB:NSQ&subview=IncomeStatement");
+            var items = parser.GetItems(rows.Result);
+        }
+
+        [TestMethod]
+        public void TestGetData()
+        {
+            var parser = new NewFTHAPParser(mockGrabber.Object, dicRepository);
+            var rows = parser.GetRows("http://markets.ft.com/data/equities/tearsheets/financials?s=FB:NSQ&subview=IncomeStatement");
+            var items = parser.GetItems(rows.Result);
+            var years = parser.GetYears("http://markets.ft.com/data/equities/tearsheets/financials?s=FB:NSQ&subview=IncomeStatement");
+            //var data = parser.GetData(items, years.Result);
+        }
+
+        [TestMethod]
         public void TestParseMock()
         {
-            //var dicRepository = (IRepository<Dictionary, Guid>)resolver.GetService(typeof(IRepository<Dictionary, Guid>));
-            var parser = new FTHAPParser(mockGrabber.Object, dicRepository);
-            //var company = parser.Parse("IMT", sexRepo.GetQuery().FirstOrDefault(d => d.Marker=="LSE"));
-            //Assert.AreEqual("Imperial Tobacco Group PLC".ToLower(), company.FullName.ToLower());
+            var parser = new NewFTHAPParser(mockGrabber.Object, dicRepository);
+            var company = parser.Parse("FB", new StockExchange { Marker = "NSQ" });
         }
 
         [TestMethod]
