@@ -28,7 +28,7 @@ namespace FinancialThing.Services.Controllers
             try
             {
                 var result = _ratioRepository.GetQuery().Where(r => r.Id == id);
-                var data = FTJsonSerializer.Serialize(result);
+                var data = FTJsonSerializer<IQueryable<Ratio>>.Serialize(result);
                 return new Status
                 {
                     Data = data,
@@ -50,7 +50,7 @@ namespace FinancialThing.Services.Controllers
             try
             {
                 var result = _ratioRepository.GetQuery().ToList();
-                var data = FTJsonSerializer.Serialize(result);
+                var data = FTJsonSerializer<List<Ratio>>.Serialize(result);
                 return new Status
                 {
                     Data = data,
@@ -70,7 +70,7 @@ namespace FinancialThing.Services.Controllers
             {
                 _ratioRepository.Add(ratio);
                 _uow.Commit();
-                var data = FTJsonSerializer.Serialize(ratio);
+                var data = FTJsonSerializer<Ratio>.Serialize(ratio);
                 return new Status
                 {
                     Data = data,

@@ -36,7 +36,7 @@ namespace FinancialThing.Services.Controllers
             try
             {
                 var ratios = _ratioValueRepo.GetQuery();
-                var data = FTJsonSerializer.Serialize(ratios);
+                var data = FTJsonSerializer<IQueryable<RatioValue>>.Serialize(ratios);
                 return new Status
                 {
                     StatusCode = "0",

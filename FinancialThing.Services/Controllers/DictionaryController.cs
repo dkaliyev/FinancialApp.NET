@@ -38,7 +38,7 @@ namespace FinancialThing.Services.Controllers
 
                 return new Status
                 {
-                    Data = FTJsonSerializer.Serialize(dics),
+                    Data = FTJsonSerializer<IQueryable<Dictionary>>.Serialize(dics),
                     StatusCode = "0"
                 };
             }

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using FinancialThing.DataAccess;
 using FinancialThing.Models;
 using FinancialThing.Utilities;
+using System.Linq;
 
 namespace FinancialThing.Services.Controllers
 {
@@ -26,7 +27,7 @@ namespace FinancialThing.Services.Controllers
             {
                 return new Status
                 {
-                    Data = FTJsonSerializer.Serialize(_sectorsRepo.GetQuery()),
+                    Data = FTJsonSerializer<IQueryable<Sector>>.Serialize(_sectorsRepo.GetQuery()),
                     StatusCode = "0"
                 };
             }
@@ -42,7 +43,7 @@ namespace FinancialThing.Services.Controllers
             {
                 return new Status
                 {
-                    Data = FTJsonSerializer.Serialize(_sectorsRepo.GetById(id)),
+                    Data = FTJsonSerializer<Sector>.Serialize(_sectorsRepo.GetById(id)),
                     StatusCode = "0"
                 };
             }
@@ -61,7 +62,7 @@ namespace FinancialThing.Services.Controllers
                 _uow.Commit();
                 return new Status()
                 {
-                    Data = FTJsonSerializer.Serialize(result),
+                    Data = FTJsonSerializer<Sector>.Serialize(result),
                     StatusCode = "0"
                 };
             }

@@ -32,7 +32,7 @@ namespace FinancialThing.Services.Controllers
                 var data = _indRepo.GetQuery();
                 return new Status
                 {
-                    Data = FTJsonSerializer.Serialize(data),
+                    Data = FTJsonSerializer<IQueryable<Industry>>.Serialize(data),
                     StatusCode = "0"
                 };
             }
@@ -48,7 +48,7 @@ namespace FinancialThing.Services.Controllers
             {
                 return new Status
                 {
-                    Data = FTJsonSerializer.Serialize(_indRepo.GetById(id)),
+                    Data = FTJsonSerializer<Industry>.Serialize(_indRepo.GetById(id)),
                     StatusCode = "0"
                 };
             }
@@ -67,7 +67,7 @@ namespace FinancialThing.Services.Controllers
                 _uow.Commit();
                 return new Status
                 {
-                    Data = FTJsonSerializer.Serialize(result),
+                    Data = FTJsonSerializer<Industry>.Serialize(result),
                     StatusCode = "0"
                 };
             }

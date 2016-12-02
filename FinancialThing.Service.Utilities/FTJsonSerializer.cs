@@ -10,9 +10,9 @@ using Newtonsoft.Json;
 
 namespace FinancialThing.Utilities
 {
-    public class FTJsonSerializer
+    public class FTJsonSerializer<T>
     {
-        public static string Serialize(object obj)
+        public static string Serialize(T obj)
         {
             if (obj == null)
                 return string.Empty;
@@ -26,6 +26,25 @@ namespace FinancialThing.Utilities
             serializer.Serialize(jsonWriter, obj);
             string serializedObject = stringWriter.ToString();
             return serializedObject;
+        }
+
+        public static T Deserialize(string obj)
+        {
+            if(obj == string.Empty)
+            {
+                return default(T);
+            }
+
+            var serializer = new JsonSerializer
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                ContractResolver = new NHibernateContractResolver()
+            };
+
+            var textReader = new StringReader(obj);
+            var jsonReader = new JsonTextReader(textReader);
+
+            return serializer.Deserialize<T>(jsonReader);
         }
     }
 }

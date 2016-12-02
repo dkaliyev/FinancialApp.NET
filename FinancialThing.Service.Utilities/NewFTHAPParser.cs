@@ -106,7 +106,16 @@ namespace FinancialThing.Utilities
                 years = years.OrderByDescending(x => x).ToList();
                 var header = GetHeader(item);
                 var statementClass = new StatementClass();
-                var dic = _dictionaries.FirstOrDefault(x => x.SiteName.ToLower() == header.FirstChild.InnerText.ToLower());
+                if (name.ToLower() == "Depreciation, supplemental".ToLower())
+                {
+                    
+                }
+                var dic = _dictionaries.FirstOrDefault(x => x.SiteName.ToLower() == header.FirstChild.InnerText.ToLower() && x.ParentCode == page.Dictionary.Code);
+
+                if (dic.Code == "DS" || dic.Code == "DS2")
+                {
+                    
+                }
                 if(statementsDic.Contains(dic.Code))
                 {
                     statementClass = statements.Single(x => x.Dictionary.Code == dic.Code);

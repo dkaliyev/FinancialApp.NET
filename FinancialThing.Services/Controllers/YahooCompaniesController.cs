@@ -36,7 +36,7 @@ namespace FinancialThing.Services.Controllers
                 var companies = _companyRepository.GetQuery().ToList();
                 return new Status
                 {
-                    Data = FTJsonSerializer.Serialize(companies),
+                    Data = FTJsonSerializer<List<YahooCompany>>.Serialize(companies),
                     StatusCode = "0"
                 };
             }
@@ -70,7 +70,7 @@ namespace FinancialThing.Services.Controllers
                 _uow.Commit();
                 return new Status
                 {
-                    Data = FTJsonSerializer.Serialize(new { status = "success" }),
+                    //Data = FTJsonSerializer.Serialize(new { status = "success" }),
                     StatusCode = "0"
                 };
             }

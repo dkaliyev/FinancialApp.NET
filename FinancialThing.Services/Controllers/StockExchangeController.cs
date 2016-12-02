@@ -5,6 +5,7 @@ using FinancialThing.DataAccess;
 using FinancialThing.Models;
 using FinancialThing.Services.Utilities;
 using FinancialThing.Utilities;
+using System.Linq;
 
 namespace FinancialThing.Services.Controllers
 {
@@ -26,7 +27,7 @@ namespace FinancialThing.Services.Controllers
 
                 return new Status
                 {
-                    Data = FTJsonSerializer.Serialize(dics),
+                    Data = FTJsonSerializer<IQueryable<StockExchange>>.Serialize(dics),
                     StatusCode = "0"
                 };
             }

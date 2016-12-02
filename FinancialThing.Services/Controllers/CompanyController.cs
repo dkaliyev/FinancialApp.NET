@@ -36,7 +36,7 @@ namespace FinancialThing.Services.Controllers
 
                 return new Status
                 {
-                    Data = FTJsonSerializer.Serialize(companies),
+                    Data = FTJsonSerializer<IQueryable<Company>>.Serialize(companies),
                     StatusCode = "0"
                 };
 
@@ -54,7 +54,7 @@ namespace FinancialThing.Services.Controllers
                 var company = _companyRepository.GetQuery().Where(c => c.Id == id).Select(x => new Company() { Id = x.Id, FullName = x.FullName, StockName = x.StockName, StockExchange = x.StockExchange, Industry = x.Industry, Sector = x.Sector });
                 return new Status
                 {
-                    Data = FTJsonSerializer.Serialize(company),
+                    Data = FTJsonSerializer<IQueryable<Company>>.Serialize(company),
                     StatusCode = "0"
                 };
             }
@@ -91,7 +91,7 @@ namespace FinancialThing.Services.Controllers
                     newCompany.Id = id.Id;
                     return new Status
                     {
-                        Data = FTJsonSerializer.Serialize(newCompany),
+                        Data = FTJsonSerializer<Company>.Serialize(newCompany),
                         StatusCode = "0"
                     };
                 }

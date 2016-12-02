@@ -59,9 +59,9 @@
       <Project>{26F66616-CD1F-4F15-89A7-F9F7E1444B6B}</Project>
       <Name>FinancialThing.Services</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FinancialThing.Utilities\FinancialThing.Utilities.csproj">
+    <ProjectReference Include="..\FinancialThing.Service.Utilities\FinancialThing.Service.Utilities.csproj">
       <Project>{2750E3AB-8A17-4A60-8891-984EBB7E43E5}</Project>
-      <Name>FinancialThing.Utilities</Name>
+      <Name>FinancialThing.Service.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

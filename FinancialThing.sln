@@ -22,7 +22,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialThing.DataAccess.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialThing.IoC", "FinancialThing.IoC\FinancialThing.IoC.csproj", "{03C492A1-DB12-40E2-9FBE-ED627FEE7603}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialThing.Utilities", "FinancialThing.Utilities\FinancialThing.Utilities.csproj", "{2750E3AB-8A17-4A60-8891-984EBB7E43E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialThing.Service.Utilities", "FinancialThing.Service.Utilities\FinancialThing.Service.Utilities.csproj", "{2750E3AB-8A17-4A60-8891-984EBB7E43E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialThing.Configuration", "FinancialThing.Configuration\FinancialThing.Configuration.csproj", "{8E3BF183-D732-451C-A349-D95BC6C98272}"
 EndProject
@@ -41,6 +41,7 @@ Global
 		{ADA28237-31BF-4DA4-BDF1-06830AE48B91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ADA28237-31BF-4DA4-BDF1-06830AE48B91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{296CC92F-C467-4138-B876-66E27E93683E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{296CC92F-C467-4138-B876-66E27E93683E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{296CC92F-C467-4138-B876-66E27E93683E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FCD138E-CCE5-484A-8CFC-176019CFF6B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7FCD138E-CCE5-484A-8CFC-176019CFF6B5}.Debug|Any CPU.Build.0 = Debug|Any CPU

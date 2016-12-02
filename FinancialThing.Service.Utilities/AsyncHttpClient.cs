@@ -46,7 +46,7 @@ namespace FinancialThing.Utilities
             {
                 httpClient.DefaultRequestHeaders.Accept.Clear();
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                StringContent queryString = new StringContent(data);
+                StringContent queryString = new StringContent(data, Encoding.UTF8, "application/json");
                 var response = await httpClient.PostAsync(new Uri(url), queryString);
                 Byte[] downloadedBytes = await response.Content.ReadAsByteArrayAsync();
                 Encoding encoding = new ASCIIEncoding();

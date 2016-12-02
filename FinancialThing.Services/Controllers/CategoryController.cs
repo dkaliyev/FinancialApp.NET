@@ -23,7 +23,7 @@ namespace FinancialThing.Services.Controllers
             try
             {
                 var dics = _repo.GetQuery();
-                var data = FTJsonSerializer.Serialize(dics);
+                var data = FTJsonSerializer<IQueryable<GroupCategory>>.Serialize(dics);
 
                 return new Status
                 {
